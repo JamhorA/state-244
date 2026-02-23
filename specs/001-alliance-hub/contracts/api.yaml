@@ -1,0 +1,547 @@
+openapi: 3.0.3
+info:
+  title: State 244 Hub API
+  description: API for State 244 Hub - Alliance management platform
+  version: 1.0.0
+  contact:
+    name: State 244 Hub
+  license:
+    name: MIT
+
+servers:
+  - url: http://localhost:3000/api
+    description: Local development
+  - url: https://state244hub.netlify.app/api
+    description: Production
+
+tags:
+  - name: Authentication
+    description: User authentication and session management
+  - name: Public
+    description: Public endpoints (no authentication required)
+  - name: Applications
+    description: Migration application management
+  - name: Chat
+    description: Real-time chat functionality
+  - name: AI
+    description: AI-powered content generation
+
+paths:
+  /auth/callback:
+    post:
+      tags:
+        - Authentication
+      summary: Handle OAuth callback
+      description: Handles authentication callback from Supabase
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                code:
+                  type: string
+                state:
+                  type: string
+      responses:
+        '200':
+          description: Authentication successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    $ref: '#/components/schemas/User'
+                  session:
+                    $ref: '#/components/schemas/Session'
+        '400':
+          description: Invalid request
+          $ref: '#/components/responses/ErrorResponse'
+        '401':
+          description: Authentication failed
+          $ref: '#/components/responses/ErrorResponse'
+
+  /public/alliances:
+    get:
+      tags:
+        - Public
+      summary: Get Top 3 Alliances
+      description: Retrieves the Top 3 alliances with their public profiles
+      responses:
+        '200':
+          description: Successfully retrieved alliances
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Alliance'
+
+  /public/alliances/{id}:
+    get:
+      tags:
+        - Public
+      summary: Get Alliance Profile
+      description: Retrieves public profile for a specific alliance
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Successfully retrieved alliance
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Alliance'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /public/applications:
+    post:
+      tags:
+        - Public
+      summary: Submit Migration Application
+      description: Public endpoint for submitting a migration application (rate limited)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MigrationApplicationCreate'
+      responses:
+        '201':
+          description: Application submitted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    format: uuid
+                  status:
+                    type: string
+                    enum: [submitted]
+        '400':
+          $ref: '#/components/responses/ErrorResponse'
+        '429':
+          description: Rate limit exceeded
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Rate limit exceeded. Please try again later.
+
+  /applications:
+    get:
+      tags:
+        - Applications
+      summary: Get Alliance Applications
+      description: Retrieves migration applications for the authenticated user's alliance (R4/R5 only)
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Successfully retrieved applications
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MigrationApplication'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          description: Insufficient permissions
+          $ref: '#/components/responses/ErrorResponse'
+
+  /applications/{id}:
+    patch:
+      tags:
+        - Applications
+      summary: Update Application Status
+      description: Updates migration application status (R4/R5 only)
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  enum: [reviewing, approved, rejected]
+      responses:
+        '200':
+          description: Application updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MigrationApplication'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          description: Insufficient permissions or not your alliance
+          $ref: '#/components/responses/ErrorResponse'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /chat/messages:
+    get:
+      tags:
+        - Chat
+      summary: Get Chat Messages
+      description: Retrieves recent messages from the global chat room (authenticated only)
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 50
+            maximum: 100
+        - name: before
+          in: query
+          required: false
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Successfully retrieved messages
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ChatMessage'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /ai/text:
+    post:
+      tags:
+        - AI
+      summary: Generate Alliance Presentation Text
+      description: Generates alliance presentation text from bullet points (R4/R5 only)
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                alliance_id:
+                  type: string
+                  format: uuid
+                bullet_points:
+                  type: array
+                  items:
+                    type: string
+                  example:
+                    - "Strong military power"
+                    - "Active member base"
+                    - "Welcoming to new players"
+                tone:
+                  type: string
+                  enum: [formal, casual, enthusiastic, professional]
+                  default: professional
+      responses:
+        '200':
+          description: Text generated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  content:
+                    type: string
+                    example: "Welcome to our powerful alliance! We boast a formidable military presence and an active, engaged member base..."
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          description: Insufficient permissions
+          $ref: '#/components/responses/ErrorResponse'
+        '429':
+          description: AI rate limit exceeded
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: AI usage limit reached for today.
+
+  /ai/image:
+    post:
+      tags:
+        - AI
+      summary: Generate Alliance Image
+      description: Generates internal alliance image (authenticated members, rate limited)
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                prompt:
+                  type: string
+                  maxLength: 1000
+                  example: "A majestic banner with a lion emblem and gold trim"
+                image_type:
+                  type: string
+                  enum: [banner, emblem, logo_draft]
+      responses:
+        '200':
+          description: Image generated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    format: uuid
+                  image_url:
+                    type: string
+                    example: "https://storage.example.com/images/generated/abc123.jpg"
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          description: AI rate limit exceeded
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Daily image generation limit (5) reached.
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        email:
+          type: string
+          format: email
+        profile:
+          $ref: '#/components/schemas/Profile'
+
+    Profile:
+      type: object
+      properties:
+        display_name:
+          type: string
+        hq_level:
+          type: integer
+          minimum: 1
+          maximum: 50
+        power:
+          type: integer
+          minimum: 0
+        notes:
+          type: string
+          maxLength: 500
+        role:
+          type: string
+          enum: [member, r4, r5]
+        alliance_id:
+          type: string
+          format: uuid
+
+    Alliance:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        rank:
+          type: integer
+          minimum: 1
+          maximum: 3
+        description:
+          type: string
+          maxLength: 2000
+        recruitment_status:
+          type: string
+          enum: [open, closed, invite_only]
+        contact_info:
+          type: string
+          maxLength: 500
+        logo_url:
+          type: string
+          format: uri
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+
+    MigrationApplicationCreate:
+      type: object
+      required:
+        - player_name
+        - current_server
+        - power_level
+        - hq_level
+        - target_alliance_id
+        - motivation
+        - website  # Honeypot field
+      properties:
+        player_name:
+          type: string
+          maxLength: 50
+        current_server:
+          type: string
+          maxLength: 100
+        power_level:
+          type: integer
+          minimum: 0
+        hq_level:
+          type: integer
+          minimum: 1
+          maximum: 50
+        target_alliance_id:
+          type: string
+          format: uuid
+        motivation:
+          type: string
+          minLength: 10
+          maxLength: 1000
+        website:
+          type: string
+          description: Honeypot field - should be empty for humans
+
+    MigrationApplication:
+      allOf:
+        - $ref: '#/components/schemas/MigrationApplicationCreate'
+        - type: object
+          properties:
+            id:
+              type: string
+              format: uuid
+            status:
+              type: string
+              enum: [submitted, reviewing, approved, rejected]
+            submitted_at:
+              type: string
+              format: date-time
+            updated_at:
+              type: string
+              format: date-time
+            reviewed_by:
+              type: string
+              format: uuid
+
+    ChatMessage:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        sender_id:
+          type: string
+          format: uuid
+        content:
+          type: string
+          maxLength: 5000
+          nullable: true
+        image_url:
+          type: string
+          format: uri
+          nullable: true
+        room_name:
+          type: string
+          default: state-244-diplomacy
+        created_at:
+          type: string
+          format: date-time
+
+    Session:
+      type: object
+      properties:
+        access_token:
+          type: string
+        refresh_token:
+          type: string
+        expires_at:
+          type: string
+          format: date-time
+
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+        details:
+          type: object
+
+  responses:
+    Unauthorized:
+      description: Authentication required or invalid token
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                example: Authentication required
+
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                example: Resource not found
+
+    ErrorResponse:
+      description: Error response
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
