@@ -192,7 +192,7 @@ export function MigrationApplicationForm({ alliance, alliances }: MigrationAppli
   };
 
   return (
-    <div className="glass-card rounded-2xl p-8 sm:p-10 border border-slate-800/80 shadow-2xl relative">
+    <div className="glass-card rounded-2xl p-4 sm:p-6 lg:p-8 border border-slate-800/80 shadow-2xl relative">
       <div className="absolute top-0 right-0 w-64 h-64 bg-sky-500/5 rounded-bl-[100px] pointer-events-none" />
 
       {submitError && (
@@ -206,7 +206,7 @@ export function MigrationApplicationForm({ alliance, alliances }: MigrationAppli
         </div>
       )}
 
-      <form onSubmit={handleSubmit} className="space-y-6 relative z-10">
+      <form onSubmit={handleSubmit} className="space-y-5 sm:space-y-6 relative z-10">
         
         {/* Alliance Selection */}
         <div>
@@ -244,7 +244,7 @@ export function MigrationApplicationForm({ alliance, alliances }: MigrationAppli
           )}
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5 md:gap-6">
           {/* Player Name */}
           <div>
             <label htmlFor="player_name" className="block text-sm font-semibold text-slate-300 mb-2">
@@ -479,7 +479,7 @@ export function MigrationApplicationForm({ alliance, alliances }: MigrationAppli
           <p className="text-xs text-slate-400 mb-3">Upload screenshots of your main team heroes, gear, and tech (Max 5 images)</p>
           
           <div 
-            className="w-full border-2 border-dashed border-slate-700/50 rounded-xl p-6 flex flex-col items-center justify-center bg-slate-900/30 hover:bg-slate-900/50 hover:border-sky-500/50 transition-all cursor-pointer"
+            className="w-full border-2 border-dashed border-slate-700/50 rounded-xl p-4 sm:p-6 flex flex-col items-center justify-center bg-slate-900/30 hover:bg-slate-900/50 hover:border-sky-500/50 transition-all cursor-pointer"
             onClick={() => fileInputRef.current?.click()}
           >
             <svg className="w-8 h-8 text-slate-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -535,7 +535,7 @@ export function MigrationApplicationForm({ alliance, alliances }: MigrationAppli
             placeholder="Tell us about your gameplay style and what you bring to the alliance..."
             disabled={isSubmitting}
           />
-          <div className="flex justify-between mt-2">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 sm:gap-3 mt-2">
             {errors.motivation ? (
               <p className="text-sm text-red-400">{errors.motivation}</p>
             ) : (
@@ -560,11 +560,11 @@ export function MigrationApplicationForm({ alliance, alliances }: MigrationAppli
         </div>
 
         {/* Action Buttons */}
-        <div className="flex items-center justify-end gap-4 pt-6 border-t border-slate-800/80">
+        <div className="flex flex-col sm:flex-row gap-3 pt-4 sm:pt-6 border-t border-slate-800/80">
           <button
             type="button"
             onClick={() => router.back()}
-            className="px-6 py-3 text-slate-400 font-medium hover:text-white transition-colors"
+            className="w-full sm:flex-1 px-4 py-3 text-center text-slate-400 hover:text-white border border-slate-700/50 rounded-xl transition-colors"
             disabled={isSubmitting}
           >
             Cancel
@@ -572,7 +572,7 @@ export function MigrationApplicationForm({ alliance, alliances }: MigrationAppli
           <button
             type="submit"
             disabled={isSubmitting}
-            className="btn-primary px-8 py-3 rounded-xl text-white font-bold flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed group"
+            className="w-full sm:flex-1 btn-primary px-4 py-3 rounded-xl text-white font-bold flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed group"
           >
             {isSubmitting ? (
               <>

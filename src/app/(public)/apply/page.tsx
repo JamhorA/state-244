@@ -20,7 +20,7 @@ export default async function ApplyPage({ searchParams }: ApplyPageProps) {
   }
 
   return (
-    <div className="min-h-screen bg-slate-950 py-12 px-4 sm:px-6 relative overflow-hidden">
+    <div className="min-h-screen bg-slate-950 py-8 sm:py-10 lg:py-12 px-4 sm:px-6 relative overflow-hidden">
       {/* Background Ambience */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
         <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-sky-500/10 blur-[120px] animate-pulse-glow" />
@@ -29,11 +29,11 @@ export default async function ApplyPage({ searchParams }: ApplyPageProps) {
       </div>
 
       <div className="relative z-10 max-w-3xl mx-auto">
-        <div className="text-center mb-10">
-          <h1 className="text-4xl sm:text-5xl font-extrabold text-white mb-4 tracking-tight">
+        <div className="text-center mb-8 sm:mb-10 px-1">
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white mb-3 sm:mb-4 tracking-tight">
             Migration <span className="gradient-text">Application</span>
           </h1>
-          <p className="text-lg text-slate-400">
+          <p className="text-base sm:text-lg text-slate-400">
             Submit your details to start your journey in State 244.
           </p>
         </div>
