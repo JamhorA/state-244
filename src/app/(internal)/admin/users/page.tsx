@@ -290,7 +290,118 @@ export default function UsersPage() {
       )}
 
       <div className="glass-card rounded-xl border border-slate-800/80 overflow-hidden">
-        <div className="overflow-x-auto">
+        <div className="xl:hidden p-4 space-y-4">
+          {users.map((user) => (
+            <div key={user.id} className="rounded-xl border border-slate-800/80 bg-slate-900/30 p-4">
+              <div className="flex items-start justify-between gap-3 mb-4">
+                <div className="min-w-0">
+                  <div className="flex items-center gap-2">
+                    {user.is_president && <span className="text-lg">👑</span>}
+                    <p className="font-medium text-white truncate">{user.display_name}</p>
+                  </div>
+                  <p className="text-xs text-slate-500 mt-1">
+                    HQ {user.hq_level} | {user.power.toLocaleString()} power
+                  </p>
+                  <p className="text-xs text-slate-600 mt-1">
+                    Created {new Date(user.created_at).toLocaleDateString()}
+                  </p>
+                </div>
+                <div className="shrink-0">
+                  {editingUser === user.id ? (
+                    <select
+                      value={user.role}
+                      onChange={(e) => handleUpdateRole(user.id, e.target.value)}
+                      onBlur={() => setEditingUser(null)}
+                      className="bg-slate-800 border border-slate-700 rounded-lg px-3 py-1.5 text-sm text-white focus:outline-none focus:border-sky-500"
+                      autoFocus
+                    >
+                      <option value="superadmin">Superadmin</option>
+                      <option value="r5">R5</option>
+                      <option value="r4">R4</option>
+                      <option value="member">Member</option>
+                    </select>
+                  ) : (
+                    <button
+                      onClick={() => setEditingUser(user.id)}
+                      className={`px-3 py-1.5 rounded-lg text-sm font-medium border ${getRoleBadgeColor(user.role)}`}
+                    >
+                      {user.role}
+                    </button>
+                  )}
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-xs text-slate-500 uppercase tracking-wide mb-1">Alliance</label>
+                  <select
+                    value={user.alliance_id || ''}
+                    onChange={(e) => handleUpdateAlliance(user.id, e.target.value || null)}
+                    className="w-full bg-slate-800/50 border border-slate-700/50 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-sky-500"
+                  >
+                    <option value="">No Alliance</option>
+                    {alliances.map(a => (
+                      <option key={a.id} value={a.id}>{a.name}</option>
+                    ))}
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-xs text-slate-500 uppercase tracking-wide mb-1">Edit Permission</label>
+                  <label className="flex items-center gap-2 cursor-pointer h-[38px] px-3 rounded-lg border border-slate-700/50 bg-slate-800/30">
+                    <input
+                      type="checkbox"
+                      checked={user.can_edit_alliance}
+                      onChange={(e) => handleUpdateEditPermission(user.id, e.target.checked)}
+                      className="w-4 h-4 rounded border-slate-600 bg-slate-800 text-sky-500 focus:ring-sky-500 focus:ring-offset-slate-900"
+                      disabled={user.role !== 'r4'}
+                    />
+                    <span className={`text-sm ${user.role !== 'r4' ? 'text-slate-600' : 'text-slate-300'}`}>
+                      {user.can_edit_alliance ? 'Can Edit' : 'No Edit'}
+                    </span>
+                  </label>
+                </div>
+              </div>
+
+              <div className="mt-4 pt-4 border-t border-slate-800/70 flex flex-col sm:flex-row sm:flex-wrap gap-2">
+                {(user.role === 'r5' || user.role === 'r4') ? (
+                  user.is_president ? (
+                    <button
+                      onClick={handleRemovePresident}
+                      disabled={assigningPresident !== null}
+                      className="px-3 py-2 bg-amber-500/20 border border-amber-500/30 text-amber-400 rounded-lg text-sm font-medium hover:bg-amber-500/30 transition-colors disabled:opacity-50"
+                    >
+                      {assigningPresident === user.id ? 'Updating...' : '👑 President'}
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() => handleAssignPresident(user.id)}
+                      disabled={assigningPresident !== null}
+                      className="px-3 py-2 bg-slate-700/50 border border-slate-600/50 text-slate-300 rounded-lg text-sm font-medium hover:bg-slate-700 transition-colors disabled:opacity-50"
+                    >
+                      {assigningPresident === user.id ? 'Assigning...' : 'Assign President'}
+                    </button>
+                  )
+                ) : (
+                  <div className="px-3 py-2 text-sm text-slate-600 border border-slate-800 rounded-lg">
+                    President: Not eligible
+                  </div>
+                )}
+
+                <button
+                  onClick={() => handleDeleteUser(user.id, user.display_name)}
+                  disabled={deletingUserId !== null || user.id === currentUser?.id}
+                  className="px-3 py-2 rounded-lg text-sm font-medium border border-red-500/30 bg-red-500/10 text-red-400 hover:bg-red-500/20 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  title={user.id === currentUser?.id ? 'Cannot delete currently logged-in account' : 'Delete user'}
+                >
+                  {deletingUserId === user.id ? 'Deleting...' : 'Delete User'}
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="hidden xl:block overflow-x-auto">
           <table className="w-full">
             <thead className="bg-slate-900/50">
               <tr>
