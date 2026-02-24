@@ -110,19 +110,19 @@ export default function CreateUserPage() {
 
   return (
     <div className="py-8">
-      <div className="mb-8">
+      <div className="mb-6 sm:mb-8">
         <Link href="/admin/users" className="text-slate-400 hover:text-white mb-4 inline-flex items-center gap-2 transition-colors">
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
           </svg>
           Back to Users
         </Link>
-        <h1 className="text-3xl font-bold text-white mb-2">Create User</h1>
+        <h1 className="text-2xl sm:text-3xl font-bold text-white mb-2">Create User</h1>
         <p className="text-slate-400">Create a new user account</p>
       </div>
 
       <div className="max-w-2xl">
-        <div className="glass-card rounded-xl border border-slate-800/80 p-8">
+        <div className="glass-card rounded-xl border border-slate-800/80 p-4 sm:p-6 lg:p-8">
           {error && (
             <div className="mb-6 p-4 bg-red-500/10 border border-red-500/20 rounded-xl">
               <p className="text-red-400 text-sm">{error}</p>
@@ -230,7 +230,7 @@ export default function CreateUserPage() {
               </div>
 
               {formData.role === 'r4' && (
-                <div className="flex items-center">
+                <div className="md:col-span-2 flex items-start sm:items-center">
                   <label className="flex items-center gap-3 cursor-pointer">
                     <input
                       type="checkbox"
@@ -245,17 +245,17 @@ export default function CreateUserPage() {
               )}
             </div>
 
-            <div className="flex items-center justify-end gap-4 pt-6 border-t border-slate-800/80">
+            <div className="flex flex-col-reverse sm:flex-row sm:items-center sm:justify-end gap-3 sm:gap-4 pt-6 border-t border-slate-800/80">
               <Link
                 href="/admin/users"
-                className="px-6 py-3 text-slate-400 font-medium hover:text-white transition-colors"
+                className="w-full sm:w-auto text-center px-6 py-3 text-slate-400 font-medium hover:text-white transition-colors"
               >
                 Cancel
               </Link>
               <button
                 type="submit"
                 disabled={submitting}
-                className="btn-primary px-8 py-3 rounded-xl text-white font-bold flex items-center gap-2 disabled:opacity-50"
+                className="btn-primary w-full sm:w-auto justify-center px-8 py-3 rounded-xl text-white font-bold flex items-center gap-2 disabled:opacity-50"
               >
                 {submitting ? (
                   <>

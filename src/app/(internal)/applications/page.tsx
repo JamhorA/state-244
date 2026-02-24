@@ -203,8 +203,8 @@ export default function ApplicationsPage() {
           ))}
         </div>
 
-      <div className="mb-6 flex flex-wrap items-center gap-4">
-        <div className="relative">
+      <div className="mb-6 flex flex-col sm:flex-row sm:flex-wrap items-stretch sm:items-center gap-3 sm:gap-4">
+        <div className="relative w-full sm:w-auto">
           <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
           </svg>
@@ -213,7 +213,7 @@ export default function ApplicationsPage() {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search player, server, alliance..."
-            className="pl-10 pr-10 py-2 bg-slate-800/50 border border-slate-700/50 rounded-lg text-white text-sm focus:outline-none focus:border-sky-500/50 w-64"
+            className="w-full sm:w-64 pl-10 pr-10 py-2 bg-slate-800/50 border border-slate-700/50 rounded-lg text-white text-sm focus:outline-none focus:border-sky-500/50"
           />
           {searchQuery && (
             <button
@@ -230,7 +230,7 @@ export default function ApplicationsPage() {
         <select
           value={allianceId || ''}
           onChange={(e) => setAllianceId(e.target.value || undefined)}
-          className="px-4 py-2 bg-slate-800/50 border border-slate-700/50 rounded-lg text-white text-sm focus:outline-none focus:border-sky-500/50 min-w-[200px]"
+          className="w-full sm:w-auto px-4 py-2 bg-slate-800/50 border border-slate-700/50 rounded-lg text-white text-sm focus:outline-none focus:border-sky-500/50 sm:min-w-[200px]"
           disabled={alliancesLoading}
         >
           <option value="">All Alliances</option>
@@ -242,7 +242,7 @@ export default function ApplicationsPage() {
         <button
           onClick={exportToXLSX}
           disabled={appsLoading || filteredApplications.length === 0}
-          className="px-4 py-2 bg-emerald-500/10 border border-emerald-500/30 rounded-lg text-emerald-400 text-sm font-medium hover:bg-emerald-500/20 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+          className="w-full sm:w-auto justify-center px-4 py-2 bg-emerald-500/10 border border-emerald-500/30 rounded-lg text-emerald-400 text-sm font-medium hover:bg-emerald-500/20 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
         >
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />

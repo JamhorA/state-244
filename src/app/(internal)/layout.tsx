@@ -85,18 +85,18 @@ export default function InternalLayout({ children }: InternalLayoutProps) {
           <div className="flex items-center justify-between h-16">
             <Link
               href="/dashboard"
-              className="flex items-center gap-3 group"
+              className="flex items-center gap-2 sm:gap-3 group min-w-0"
             >
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-sky-400 to-indigo-600 flex items-center justify-center shadow-lg shadow-sky-500/20">
+              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-sky-400 to-indigo-600 flex items-center justify-center shadow-lg shadow-sky-500/20 shrink-0">
                 <span className="text-white font-bold text-sm">244</span>
               </div>
-              <span className="text-xl font-bold text-slate-100 group-hover:text-white transition-colors tracking-tight">
+              <span className="text-lg sm:text-xl font-bold text-slate-100 group-hover:text-white transition-colors tracking-tight whitespace-nowrap truncate">
                 State 244 <span className="text-sky-400">Hub</span>
               </span>
             </Link>
 
             {/* Desktop Navigation */}
-            <div className="hidden md:flex items-center gap-1">
+            <div className="hidden xl:flex items-center gap-1">
               <Link
                 href="/dashboard"
                 className="text-slate-400 hover:text-white font-medium px-4 py-2 rounded-lg hover:bg-slate-800/80 transition-all text-sm"
@@ -152,8 +152,8 @@ export default function InternalLayout({ children }: InternalLayoutProps) {
                 Help
               </Link>
 
-              <div className="flex items-center gap-2 ml-4 pl-4 border-l border-slate-800">
-                <span className="text-sm text-slate-500">
+              <div className="flex items-center gap-2 ml-4 pl-4 border-l border-slate-800 min-w-0">
+                <span className="text-sm text-slate-500 max-w-[180px] truncate">
                   {profile?.display_name}
                   <span className="ml-2 px-2 py-0.5 rounded text-xs bg-slate-800 text-slate-400">
                     {profile?.role}
@@ -174,7 +174,8 @@ export default function InternalLayout({ children }: InternalLayoutProps) {
             {/* Mobile Menu Button */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden p-2 text-slate-400 hover:text-white transition-colors rounded-lg hover:bg-slate-800/80"
+              className="xl:hidden p-2 text-slate-400 hover:text-white transition-colors rounded-lg hover:bg-slate-800/80"
+              aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
             >
               {mobileMenuOpen ? (
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -192,18 +193,18 @@ export default function InternalLayout({ children }: InternalLayoutProps) {
 
       {/* Mobile Menu Overlay */}
       {mobileMenuOpen && (
-        <div className="md:hidden fixed inset-0 z-40 animate-fade-in">
+        <div className="xl:hidden fixed inset-0 z-40 animate-fade-in">
           <div 
             className="absolute inset-0 bg-slate-950/95 backdrop-blur-md"
             onClick={closeMobileMenu}
           />
           
-          <div className="relative h-full flex flex-col pt-20 px-6">
-            <div className="flex flex-col space-y-2">
+          <div className="relative h-full flex flex-col pt-16 sm:pt-20 px-4 sm:px-6">
+            <div className="flex flex-col space-y-2 w-full max-w-xl mx-auto">
               <Link
                 href="/dashboard"
                 onClick={closeMobileMenu}
-                className="text-2xl font-semibold text-slate-200 py-4 px-6 hover:text-white hover:bg-slate-800/50 transition-all rounded-xl"
+                className="w-full text-left text-lg sm:text-xl font-semibold text-slate-200 py-3 sm:py-4 px-4 sm:px-6 hover:text-white hover:bg-slate-800/50 transition-all rounded-xl"
               >
                 Dashboard
               </Link>
@@ -212,7 +213,7 @@ export default function InternalLayout({ children }: InternalLayoutProps) {
                 <Link
                   href="/alliance"
                   onClick={closeMobileMenu}
-                  className="text-2xl font-semibold text-slate-200 py-4 px-6 hover:text-white hover:bg-slate-800/50 transition-all rounded-xl"
+                  className="w-full text-left text-lg sm:text-xl font-semibold text-slate-200 py-3 sm:py-4 px-4 sm:px-6 hover:text-white hover:bg-slate-800/50 transition-all rounded-xl"
                 >
                   Alliance
                 </Link>
@@ -222,7 +223,7 @@ export default function InternalLayout({ children }: InternalLayoutProps) {
                 <Link
                   href="/applications"
                   onClick={closeMobileMenu}
-                  className="text-2xl font-semibold text-slate-200 py-4 px-6 hover:text-white hover:bg-slate-800/50 transition-all rounded-xl"
+                  className="w-full text-left text-lg sm:text-xl font-semibold text-slate-200 py-3 sm:py-4 px-4 sm:px-6 hover:text-white hover:bg-slate-800/50 transition-all rounded-xl"
                 >
                   Applications
                 </Link>
@@ -232,7 +233,7 @@ export default function InternalLayout({ children }: InternalLayoutProps) {
                 <Link
                   href="/state-info/proposals"
                   onClick={closeMobileMenu}
-                  className="text-2xl font-semibold text-slate-200 py-4 px-6 hover:text-white hover:bg-slate-800/50 transition-all rounded-xl flex items-center gap-3"
+                  className="w-full text-left text-lg sm:text-xl font-semibold text-slate-200 py-3 sm:py-4 px-4 sm:px-6 hover:text-white hover:bg-slate-800/50 transition-all rounded-xl flex items-center gap-3"
                 >
                   Proposals
                   {pendingCount > 0 && (
@@ -247,7 +248,7 @@ export default function InternalLayout({ children }: InternalLayoutProps) {
                 <Link
                   href="/admin"
                   onClick={closeMobileMenu}
-                  className="text-2xl font-semibold text-amber-400 py-4 px-6 hover:text-amber-300 hover:bg-amber-500/10 transition-all rounded-xl"
+                  className="w-full text-left text-lg sm:text-xl font-semibold text-amber-400 py-3 sm:py-4 px-4 sm:px-6 hover:text-amber-300 hover:bg-amber-500/10 transition-all rounded-xl"
                 >
                   Admin
                 </Link>
@@ -256,7 +257,7 @@ export default function InternalLayout({ children }: InternalLayoutProps) {
               <Link
                 href="/help"
                 onClick={closeMobileMenu}
-                className="text-2xl font-semibold text-emerald-400 py-4 px-6 hover:text-emerald-300 hover:bg-emerald-500/10 transition-all rounded-xl"
+                className="w-full text-left text-lg sm:text-xl font-semibold text-emerald-400 py-3 sm:py-4 px-4 sm:px-6 hover:text-emerald-300 hover:bg-emerald-500/10 transition-all rounded-xl"
               >
                 Help
               </Link>
@@ -264,12 +265,12 @@ export default function InternalLayout({ children }: InternalLayoutProps) {
 
             <div className="h-px bg-slate-800 my-6" />
 
-            <div className="flex flex-col items-center space-y-4">
-              <div className="flex items-center gap-3 text-slate-400">
+            <div className="flex flex-col items-stretch space-y-4 w-full max-w-xl mx-auto">
+              <div className="flex items-center gap-3 text-slate-400 px-4 sm:px-6">
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                 </svg>
-                <span className="text-lg">{profile?.display_name}</span>
+                <span className="text-sm sm:text-base truncate">{profile?.display_name}</span>
                 <span className="px-2 py-0.5 rounded text-xs bg-slate-800 text-slate-400">
                   {profile?.role}
                 </span>
@@ -277,12 +278,12 @@ export default function InternalLayout({ children }: InternalLayoutProps) {
               
               <button
                 onClick={handleSignOut}
-                className="flex items-center gap-2 text-red-400 hover:text-red-300 transition-colors py-2 px-4"
+                className="self-start flex items-center gap-2 text-red-400 hover:text-red-300 transition-colors py-2 px-4 sm:px-6 text-sm sm:text-base"
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
                 </svg>
-                <span className="text-lg font-medium">Sign Out</span>
+                <span className="font-medium">Sign Out</span>
               </button>
             </div>
           </div>
