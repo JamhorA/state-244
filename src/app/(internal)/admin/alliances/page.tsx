@@ -54,7 +54,7 @@ export default function AdminAlliancesPage() {
 
   return (
     <div className="py-8">
-      <div className="mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      <div className="mb-6 sm:mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <Link href="/admin" className="text-slate-400 hover:text-white mb-4 inline-flex items-center gap-2 transition-colors">
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -62,7 +62,7 @@ export default function AdminAlliancesPage() {
             </svg>
             Back to Admin
           </Link>
-          <h1 className="text-3xl font-bold text-white mb-2">Alliances</h1>
+          <h1 className="text-2xl sm:text-3xl font-bold text-white mb-2">Alliances</h1>
           <p className="text-slate-400">Overview of all alliance records in the system</p>
         </div>
         <div className="text-sm text-slate-400">
@@ -82,7 +82,59 @@ export default function AdminAlliancesPage() {
             <p className="text-slate-400">No alliances found.</p>
           </div>
         ) : (
-          <div className="overflow-x-auto">
+          <>
+            <div className="xl:hidden p-4 space-y-4">
+              {alliances.map((alliance) => (
+                <div key={alliance.id} className="rounded-xl border border-slate-800/80 bg-slate-900/30 p-4">
+                  <div className="flex items-start justify-between gap-3 mb-3">
+                    <div className="min-w-0">
+                      <p className="text-white font-semibold">
+                        #{alliance.rank} {alliance.name}
+                      </p>
+                      <p className="text-xs text-slate-500 mt-1 line-clamp-2">
+                        {alliance.description || 'No description'}
+                      </p>
+                    </div>
+                    <span className={`inline-flex px-2 py-1 rounded text-xs shrink-0 ${
+                      alliance.recruitment_status === 'open'
+                        ? 'bg-emerald-500/20 text-emerald-400'
+                        : alliance.recruitment_status === 'invite_only'
+                        ? 'bg-amber-500/20 text-amber-400'
+                        : 'bg-slate-700/60 text-slate-300'
+                    }`}>
+                      {alliance.recruitment_status.replace('_', ' ')}
+                    </span>
+                  </div>
+
+                  <p className="text-sm text-slate-400 mb-3">
+                    <span className="text-slate-500">Contact:</span> {alliance.contact_info || '-'}
+                  </p>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                    <Link
+                      href={`/alliances/${alliance.id}`}
+                      className="text-center px-3 py-2 rounded-lg text-xs bg-sky-500/10 text-sky-300 border border-sky-500/20 hover:bg-sky-500/20 transition-colors"
+                    >
+                      Public Profile
+                    </Link>
+                    <Link
+                      href={`/admin/alliances/${alliance.id}`}
+                      className="text-center px-3 py-2 rounded-lg text-xs bg-amber-500/10 text-amber-300 border border-amber-500/20 hover:bg-amber-500/20 transition-colors"
+                    >
+                      Edit
+                    </Link>
+                    <Link
+                      href="/applications"
+                      className="text-center px-3 py-2 rounded-lg text-xs bg-slate-800 text-slate-200 border border-slate-700 hover:border-slate-600 transition-colors"
+                    >
+                      Applications
+                    </Link>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="hidden xl:block overflow-x-auto">
             <table className="w-full">
               <thead className="bg-slate-900/60 border-b border-slate-800">
                 <tr className="text-left text-xs uppercase tracking-wide text-slate-400">
@@ -145,7 +197,8 @@ export default function AdminAlliancesPage() {
                 ))}
               </tbody>
             </table>
-          </div>
+            </div>
+          </>
         )}
       </div>
     </div>

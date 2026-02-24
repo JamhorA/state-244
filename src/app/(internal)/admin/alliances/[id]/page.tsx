@@ -129,14 +129,14 @@ export default function AdminAllianceEditPage() {
 
   return (
     <div className="py-8">
-      <div className="mb-8">
+      <div className="mb-6 sm:mb-8">
         <Link href="/admin/alliances" className="text-slate-400 hover:text-white mb-4 inline-flex items-center gap-2 transition-colors">
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
           </svg>
           Back to Alliances
         </Link>
-        <h1 className="text-3xl font-bold text-white mb-2">Edit Alliance</h1>
+        <h1 className="text-2xl sm:text-3xl font-bold text-white mb-2">Edit Alliance</h1>
         <p className="text-slate-400">
           Superadmin editing public-facing content for <span className="text-white font-medium">{alliance.name}</span>
         </p>
@@ -155,7 +155,7 @@ export default function AdminAllianceEditPage() {
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="glass-card rounded-xl border border-slate-800/80 p-8 space-y-6">
+        <form onSubmit={handleSubmit} className="glass-card rounded-xl border border-slate-800/80 p-4 sm:p-6 lg:p-8 space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <label htmlFor="name" className="block text-sm font-medium text-slate-300 mb-2">
@@ -223,17 +223,17 @@ export default function AdminAllianceEditPage() {
             />
           </div>
 
-          <div className="pt-6 border-t border-slate-800/80 flex items-center justify-between gap-4">
+          <div className="pt-6 border-t border-slate-800/80 flex flex-col-reverse sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4">
             <Link
               href={`/alliances/${alliance.id}`}
-              className="px-4 py-2.5 rounded-lg border border-slate-700 text-slate-300 hover:text-white hover:border-slate-600 transition-colors"
+              className="w-full sm:w-auto text-center px-4 py-2.5 rounded-lg border border-slate-700 text-slate-300 hover:text-white hover:border-slate-600 transition-colors"
             >
               View Public Page
             </Link>
             <button
               type="submit"
               disabled={saving}
-              className="btn-primary px-8 py-3 rounded-xl text-white font-bold flex items-center gap-2 disabled:opacity-50"
+              className="btn-primary w-full sm:w-auto justify-center px-8 py-3 rounded-xl text-white font-bold flex items-center gap-2 disabled:opacity-50"
             >
               {saving ? 'Saving...' : 'Save Changes'}
             </button>
