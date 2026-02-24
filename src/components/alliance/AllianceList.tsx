@@ -9,7 +9,7 @@ interface AllianceListProps {
 export function AllianceList({ alliances, loading }: AllianceListProps) {
   if (loading) {
     return (
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
         {[1, 2, 3].map((i) => (
           <div key={i} className="glass-card rounded-2xl p-6">
             <div className="flex items-start justify-between mb-5">
@@ -51,7 +51,7 @@ export function AllianceList({ alliances, loading }: AllianceListProps) {
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
       {alliances.map((alliance) => (
         <AllianceCard key={alliance.id} alliance={alliance} />
       ))}

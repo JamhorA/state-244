@@ -163,19 +163,19 @@ export function ApprovedPlayersMarquee({ players }: ApprovedPlayersMarqueeProps)
       
       <div className="relative">
         <div className="text-center mb-8 px-4">
-          <h2 className="text-3xl sm:text-4xl font-bold text-white mb-2 flex items-center justify-center gap-3">
+          <h2 className="text-2xl sm:text-4xl font-bold text-white mb-2 flex flex-wrap items-center justify-center gap-2 sm:gap-3">
             <span className="text-4xl">🎉</span>
             <span>Welcome to the Family!</span>
             <span className="text-4xl">🎉</span>
           </h2>
-          <p className="text-slate-400 text-lg">
+          <p className="text-slate-400 text-base sm:text-lg">
             Our newest approved members
           </p>
         </div>
 
         <div className="relative" ref={containerRef}>
-          <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-slate-950 to-transparent z-10 pointer-events-none" />
-          <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-slate-950 to-transparent z-10 pointer-events-none" />
+          <div className="absolute left-0 top-0 bottom-0 w-12 sm:w-20 lg:w-32 bg-gradient-to-r from-slate-950 to-transparent z-10 pointer-events-none" />
+          <div className="absolute right-0 top-0 bottom-0 w-12 sm:w-20 lg:w-32 bg-gradient-to-l from-slate-950 to-transparent z-10 pointer-events-none" />
 
           <div className="overflow-hidden py-4">
             <div

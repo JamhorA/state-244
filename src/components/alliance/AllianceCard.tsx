@@ -48,11 +48,11 @@ export function AllianceCard({ alliance }: AllianceCardProps) {
         {alliance.description}
       </p>
 
-      <div className="flex items-center justify-between mt-auto pt-4 border-t border-slate-800/60">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mt-auto pt-4 border-t border-slate-800/60">
         <span className="text-sm text-slate-500 font-medium">{statusText}</span>
         <Link
           href={`/alliances/${alliance.id}`}
-          className="inline-flex items-center gap-2 px-5 py-2.5 bg-slate-800 text-white font-medium text-sm rounded-lg hover:bg-slate-700 transition-all group-hover:bg-sky-500 shadow-[0_4px_14px_rgba(0,0,0,0.1)] group-hover:shadow-[0_4px_14px_rgba(14,165,233,0.3)]"
+          className="inline-flex w-full sm:w-auto justify-center items-center gap-2 px-5 py-2.5 bg-slate-800 text-white font-medium text-sm rounded-lg hover:bg-slate-700 transition-all group-hover:bg-sky-500 shadow-[0_4px_14px_rgba(0,0,0,0.1)] group-hover:shadow-[0_4px_14px_rgba(14,165,233,0.3)]"
         >
           View Profile
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" className="w-4 h-4 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">

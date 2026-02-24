@@ -66,7 +66,7 @@ export default async function HomePage() {
             </div>
             
             {/* Main Headline */}
-            <h1 className="text-5xl sm:text-6xl lg:text-8xl font-black text-white mb-6 leading-[1.05] tracking-tight">
+            <h1 className="text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-black text-white mb-6 leading-[1.05] tracking-tight">
               Welcome to
               <span className="block text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-amber-400 to-amber-500">
                 State 244
@@ -125,7 +125,7 @@ export default async function HomePage() {
 
         {/* --- FEATURES SECTION --- */}
         <section className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
             {/* Feature 1 */}
             <div className="glass-card rounded-2xl p-8 card-hover relative overflow-hidden group">
               <div className="absolute top-0 right-0 w-32 h-32 bg-amber-500/10 rounded-bl-full -z-10 group-hover:scale-110 transition-transform duration-500" />
@@ -203,7 +203,7 @@ export default async function HomePage() {
 
         {/* --- BOTTOM CTA --- */}
         <section className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
-          <div className="relative overflow-hidden rounded-[2.5rem] bg-gradient-to-br from-amber-500/10 via-slate-900 to-amber-500/5 border border-amber-400/20 p-10 sm:p-16 lg:p-20 shadow-[0_0_60px_rgba(251,191,36,0.1)]">
+          <div className="relative overflow-hidden rounded-[2.5rem] bg-gradient-to-br from-amber-500/10 via-slate-900 to-amber-500/5 border border-amber-400/20 p-8 sm:p-12 lg:p-16 xl:p-20 shadow-[0_0_60px_rgba(251,191,36,0.1)]">
             <div className="absolute inset-0 overflow-hidden pointer-events-none">
               <div className="absolute -top-32 -right-32 w-80 h-80 bg-amber-400/10 rounded-full blur-3xl animate-float" />
               <div className="absolute -bottom-32 -left-32 w-80 h-80 bg-amber-400/5 rounded-full blur-3xl animate-float-delayed" />
@@ -218,15 +218,15 @@ export default async function HomePage() {
                 ))}
               </div>
               
-              <h2 className="text-4xl sm:text-5xl font-bold text-white mb-6 tracking-tight">
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-6 tracking-tight">
                 Ready to Make History?
               </h2>
-              <p className="text-lg sm:text-xl text-slate-300 mb-10 leading-relaxed font-light">
+              <p className="text-base sm:text-lg lg:text-xl text-slate-300 mb-10 leading-relaxed font-light">
                 Join a 5-star state with an undefeated legacy. Your chapter in our story begins today.
               </p>
               <Link
                 href="/apply"
-                className="inline-flex items-center gap-3 px-10 py-4 bg-gradient-to-r from-amber-400 to-amber-500 text-slate-900 font-bold text-lg rounded-xl shadow-[0_10px_40px_rgba(251,191,36,0.3)] hover:shadow-[0_15px_50px_rgba(251,191,36,0.4)] hover:-translate-y-1 transition-all duration-300 group"
+                className="inline-flex w-full sm:w-auto justify-center items-center gap-3 px-6 sm:px-8 lg:px-10 py-4 bg-gradient-to-r from-amber-400 to-amber-500 text-slate-900 font-bold text-base sm:text-lg rounded-xl shadow-[0_10px_40px_rgba(251,191,36,0.3)] hover:shadow-[0_15px_50px_rgba(251,191,36,0.4)] hover:-translate-y-1 transition-all duration-300 group"
               >
                 Start Your Application
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" className="w-5 h-5 shrink-0 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
