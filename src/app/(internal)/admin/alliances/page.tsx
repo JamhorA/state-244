@@ -12,6 +12,7 @@ export default function AdminAlliancesPage() {
   const router = useRouter();
   const { isAuthenticated, loading: authLoading } = useAuth();
   const { isSuperadmin, loading: roleLoading } = useRole();
+  const isSuperadminUser = isSuperadmin();
   const [alliances, setAlliances] = useState<Alliance[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -19,13 +20,13 @@ export default function AdminAlliancesPage() {
     if (!authLoading && !roleLoading) {
       if (!isAuthenticated) {
         router.replace('/login?redirect=/admin/alliances');
-      } else if (!isSuperadmin()) {
+      } else if (!isSuperadminUser) {
         router.replace('/dashboard');
       } else {
         fetchAlliances();
       }
     }
-  }, [authLoading, roleLoading, isAuthenticated, isSuperadmin, router]);
+  }, [authLoading, roleLoading, isAuthenticated, isSuperadminUser, router]);
 
   async function fetchAlliances() {
     try {
@@ -125,6 +126,12 @@ export default function AdminAlliancesPage() {
                           className="px-3 py-1.5 rounded-lg text-xs bg-sky-500/10 text-sky-300 border border-sky-500/20 hover:bg-sky-500/20 transition-colors"
                         >
                           Public Profile
+                        </Link>
+                        <Link
+                          href={`/admin/alliances/${alliance.id}`}
+                          className="px-3 py-1.5 rounded-lg text-xs bg-amber-500/10 text-amber-300 border border-amber-500/20 hover:bg-amber-500/20 transition-colors"
+                        >
+                          Edit
                         </Link>
                         <Link
                           href="/applications"
