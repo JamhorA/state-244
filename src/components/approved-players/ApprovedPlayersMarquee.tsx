@@ -113,7 +113,9 @@ function RegularCard({ player }: { player: ApprovedPlayer }) {
   );
 }
 
-function T10EliteCard({ player }: { player: ApprovedPlayer }) {
+type EliteTheme = 'gold' | 'silver';
+
+function EliteCard({ player, theme }: { player: ApprovedPlayer; theme: EliteTheme }) {
   const formattedDate = formatApprovedDate(player.approved_at);
 
   const formattedPower = player.power_level >= 1000000
@@ -122,124 +124,108 @@ function T10EliteCard({ player }: { player: ApprovedPlayer }) {
     ? `${(player.power_level / 1000).toFixed(0)}K`
     : player.power_level.toString();
 
+  const isGold = theme === 'gold';
+
+  const themeStyles = isGold
+    ? {
+        shimmerClass: 't10-shimmer-border',
+        glowClass: 't10-glow',
+        shellClass: 'bg-gradient-to-br from-slate-900 via-slate-900 to-amber-950/30 border border-amber-400/30',
+        overlayClass: 'bg-gradient-to-br from-amber-500/5 to-transparent',
+        icon: '\u{1F451}',
+        iconGlow: 'drop-shadow-[0_0_8px_rgba(251,191,36,0.8)]',
+        titleClass: 't10-gold-text',
+        badge: 'T10',
+        badgeClass: 't10-badge',
+        dividerClass: 't10-gold-divider',
+        allianceTextClass: 'text-amber-200',
+        powerTextClass: 'text-amber-300',
+        dateTextClass: 'text-amber-200/70',
+        starChar: '\u2B50',
+        starClass: 'text-amber-400 drop-shadow-[0_0_4px_rgba(251,191,36,0.6)]',
+      }
+    : {
+        shimmerClass: 'bg-[linear-gradient(90deg,transparent_0%,rgba(56,189,248,0.25)_25%,rgba(56,189,248,0.5)_50%,rgba(56,189,248,0.25)_75%,transparent_100%)] bg-[length:200%_100%] animate-[t10-shimmer_3s_linear_infinite]',
+        glowClass: 'bg-[radial-gradient(ellipse_at_center,rgba(56,189,248,0.28)_0%,transparent_70%)]',
+        shellClass: 'bg-gradient-to-br from-slate-900 via-slate-900 to-sky-950/30 border border-sky-400/30',
+        overlayClass: 'bg-gradient-to-br from-sky-400/5 to-transparent',
+        icon: '\u2694',
+        iconGlow: 'drop-shadow-[0_0_8px_rgba(56,189,248,0.8)]',
+        titleClass: 'bg-gradient-to-r from-sky-200 via-cyan-300 to-sky-400 bg-clip-text text-transparent',
+        badge: 'T9',
+        badgeClass: 'text-[10px] font-bold px-2 py-0.5 rounded-full bg-gradient-to-r from-sky-400 to-cyan-400 text-slate-950 shadow-[0_0_10px_rgba(56,189,248,0.45)]',
+        dividerClass: 'bg-gradient-to-r from-transparent via-sky-400/50 to-transparent',
+        allianceTextClass: 'text-sky-100',
+        powerTextClass: 'text-cyan-200',
+        dateTextClass: 'text-sky-100/70',
+        starChar: '\u2726',
+        starClass: 'text-sky-300 drop-shadow-[0_0_4px_rgba(56,189,248,0.6)]',
+      };
+
   return (
     <div className="flex-shrink-0 w-56 t10-elite-card">
-      <div className="absolute inset-0 rounded-xl t10-shimmer-border" />
-      <div className="absolute -inset-1 rounded-xl t10-glow blur-sm" />
+      <div className={`absolute inset-0 rounded-xl ${themeStyles.shimmerClass}`} />
+      <div className={`absolute -inset-1 rounded-xl blur-sm ${themeStyles.glowClass}`} />
 
       <div className="t10-sparkle t10-sparkle-1">{'\u2728'}</div>
       <div className="t10-sparkle t10-sparkle-2">{'\u2728'}</div>
       <div className="t10-sparkle t10-sparkle-3">{'\u2728'}</div>
       <div className="t10-sparkle t10-sparkle-4">{'\u2728'}</div>
 
-      <div className="relative p-4 rounded-xl bg-gradient-to-br from-slate-900 via-slate-900 to-amber-950/30 border border-amber-400/30 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-amber-500/5 to-transparent pointer-events-none" />
+      <div className={`relative p-4 rounded-xl overflow-hidden ${themeStyles.shellClass}`}>
+        <div className={`absolute inset-0 pointer-events-none ${themeStyles.overlayClass}`} />
 
         <div className="relative">
           <div className="flex items-center justify-between mb-2">
             <div className="flex items-center gap-2">
-              <span className="text-2xl drop-shadow-[0_0_8px_rgba(251,191,36,0.8)]">{'\u{1F451}'}</span>
-              <h3 className="font-bold text-lg truncate t10-gold-text">
+              <span className={`text-2xl ${themeStyles.iconGlow}`}>{themeStyles.icon}</span>
+              <h3 className={`font-bold text-lg truncate ${themeStyles.titleClass}`}>
                 {player.player_name}
               </h3>
             </div>
-            <span className="t10-badge">T10</span>
-          </div>
-
-          <div className="h-px t10-gold-divider mb-3" />
-
-          <div className="space-y-2 text-sm">
-            <div className="flex items-center gap-2 text-amber-200">
-              <span className="text-base">{'\u{1F3C6}'}</span>
-              <span className="truncate font-medium">{player.target_alliance_name}</span>
-            </div>
-
-            <div className="flex items-center gap-2 text-amber-300">
-              <span className="text-base">{'\u26A1'}</span>
-              <span className="font-semibold">{formattedPower} Power</span>
-            </div>
-
-            <div className="flex items-center gap-2 text-amber-200/70">
-              <span className="text-base">{'\u{1F4C5}'}</span>
-              <span>{formattedDate}</span>
-            </div>
-          </div>
-
-          <div className="flex justify-center mt-3 gap-0.5">
-            <span className="text-amber-400 text-sm drop-shadow-[0_0_4px_rgba(251,191,36,0.6)]">{'\u2B50'}</span>
-            <span className="text-amber-400 text-sm drop-shadow-[0_0_4px_rgba(251,191,36,0.6)]">{'\u2B50'}</span>
-            <span className="text-amber-400 text-sm drop-shadow-[0_0_4px_rgba(251,191,36,0.6)]">{'\u2B50'}</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function T9EliteCard({ player }: { player: ApprovedPlayer }) {
-  const formattedDate = formatApprovedDate(player.approved_at);
-
-  const formattedPower = player.power_level >= 1000000
-    ? `${(player.power_level / 1000000).toFixed(1)}M`
-    : player.power_level >= 1000
-    ? `${(player.power_level / 1000).toFixed(0)}K`
-    : player.power_level.toString();
-
-  return (
-    <div className="flex-shrink-0 w-56 t10-elite-card">
-      <div className="absolute inset-0 rounded-xl bg-[linear-gradient(90deg,transparent_0%,rgba(56,189,248,0.25)_25%,rgba(56,189,248,0.5)_50%,rgba(56,189,248,0.25)_75%,transparent_100%)] bg-[length:200%_100%] animate-[t10-shimmer_3s_linear_infinite]" />
-      <div className="absolute -inset-1 rounded-xl blur-sm bg-[radial-gradient(ellipse_at_center,rgba(56,189,248,0.28)_0%,transparent_70%)]" />
-
-      <div className="t10-sparkle t10-sparkle-1">{'\u2728'}</div>
-      <div className="t10-sparkle t10-sparkle-2">{'\u2728'}</div>
-      <div className="t10-sparkle t10-sparkle-3">{'\u2728'}</div>
-      <div className="t10-sparkle t10-sparkle-4">{'\u2728'}</div>
-
-      <div className="relative p-4 rounded-xl bg-gradient-to-br from-slate-900 via-slate-900 to-sky-950/30 border border-sky-400/30 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-sky-400/5 to-transparent pointer-events-none" />
-
-        <div className="relative">
-          <div className="flex items-center justify-between mb-2">
-            <div className="flex items-center gap-2">
-              <span className="text-2xl drop-shadow-[0_0_8px_rgba(56,189,248,0.8)]">{'\u2694'}</span>
-              <h3 className="font-bold text-lg truncate bg-gradient-to-r from-sky-200 via-cyan-300 to-sky-400 bg-clip-text text-transparent">
-                {player.player_name}
-              </h3>
-            </div>
-            <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-gradient-to-r from-sky-400 to-cyan-400 text-slate-950 shadow-[0_0_10px_rgba(56,189,248,0.45)]">
-              T9
+            <span className={themeStyles.badgeClass}>
+              {themeStyles.badge}
             </span>
           </div>
 
-          <div className="h-px mb-3 bg-gradient-to-r from-transparent via-sky-400/50 to-transparent" />
+          <div className={`h-px mb-3 ${themeStyles.dividerClass}`} />
 
           <div className="space-y-2 text-sm">
-            <div className="flex items-center gap-2 text-sky-100">
+            <div className={`flex items-center gap-2 ${themeStyles.allianceTextClass}`}>
               <span className="text-base">{'\u{1F3C6}'}</span>
               <span className="truncate font-medium">{player.target_alliance_name}</span>
             </div>
 
-            <div className="flex items-center gap-2 text-cyan-200">
+            <div className={`flex items-center gap-2 ${themeStyles.powerTextClass}`}>
               <span className="text-base">{'\u26A1'}</span>
               <span className="font-semibold">{formattedPower} Power</span>
             </div>
 
-            <div className="flex items-center gap-2 text-sky-100/70">
+            <div className={`flex items-center gap-2 ${themeStyles.dateTextClass}`}>
               <span className="text-base">{'\u{1F4C5}'}</span>
               <span>{formattedDate}</span>
             </div>
           </div>
 
           <div className="flex justify-center mt-3 gap-0.5">
-            <span className="text-sky-300 text-sm drop-shadow-[0_0_4px_rgba(56,189,248,0.6)]">{'\u2726'}</span>
-            <span className="text-sky-300 text-sm drop-shadow-[0_0_4px_rgba(56,189,248,0.6)]">{'\u2726'}</span>
-            <span className="text-sky-300 text-sm drop-shadow-[0_0_4px_rgba(56,189,248,0.6)]">{'\u2726'}</span>
+            <span className={`text-sm ${themeStyles.starClass}`}>{themeStyles.starChar}</span>
+            <span className={`text-sm ${themeStyles.starClass}`}>{themeStyles.starChar}</span>
+            <span className={`text-sm ${themeStyles.starClass}`}>{themeStyles.starChar}</span>
           </div>
         </div>
       </div>
     </div>
   );
 }
+
+function T10EliteCard({ player }: { player: ApprovedPlayer }) {
+  return <EliteCard player={player} theme="gold" />;
+}
+
+function T9EliteCard({ player }: { player: ApprovedPlayer }) {
+  return <EliteCard player={player} theme="silver" />;
+}
+
 function PlayerCard({ player }: { player: ApprovedPlayer }) {
   const isT10 = player.troop_level?.toUpperCase() === 'T10';
   const isT9 = player.troop_level?.toUpperCase() === 'T9';
