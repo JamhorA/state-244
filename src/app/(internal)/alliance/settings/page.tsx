@@ -130,7 +130,7 @@ export default function AllianceSettingsPage() {
           </svg>
           Back to Alliance
         </Link>
-        <h1 className="text-3xl font-bold text-white mb-2">Alliance Settings</h1>
+        <h1 className="text-2xl sm:text-3xl font-bold text-white mb-2">Alliance Settings</h1>
         <p className="text-slate-400">Manage your alliance information</p>
       </div>
 
@@ -147,7 +147,7 @@ export default function AllianceSettingsPage() {
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="glass-card rounded-xl border border-slate-800/80 p-8 space-y-6">
+        <form onSubmit={handleSubmit} className="glass-card rounded-xl border border-slate-800/80 p-4 sm:p-6 lg:p-8 space-y-5 sm:space-y-6">
           <div>
             <label htmlFor="name" className="block text-sm font-medium text-slate-300 mb-2">
               Alliance Name
@@ -214,17 +214,17 @@ export default function AllianceSettingsPage() {
             />
           </div>
 
-          <div className="pt-6 border-t border-slate-800/80 flex justify-end gap-4">
+          <div className="pt-4 sm:pt-6 border-t border-slate-800/80 flex flex-col sm:flex-row gap-3">
             <Link
               href="/alliance"
-              className="px-6 py-3 text-slate-400 font-medium hover:text-white transition-colors"
+              className="w-full sm:flex-1 px-4 py-3 text-center text-slate-400 hover:text-white border border-slate-700/50 rounded-xl transition-colors"
             >
               Cancel
             </Link>
             <button
               type="submit"
               disabled={saving}
-              className="btn-primary px-8 py-3 rounded-xl text-white font-bold flex items-center gap-2 disabled:opacity-50"
+              className="w-full sm:flex-1 btn-primary px-4 py-3 rounded-xl text-white font-bold flex items-center justify-center gap-2 disabled:opacity-50"
             >
               {saving ? (
                 <>

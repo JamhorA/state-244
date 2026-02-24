@@ -216,7 +216,7 @@ export default function AllianceMembersPage() {
 
   return (
     <div className="py-8">
-      <div className="flex items-center justify-between mb-8">
+      <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-8">
         <div>
           <Link href="/alliance" className="text-slate-400 hover:text-white mb-4 inline-flex items-center gap-2 transition-colors">
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -224,13 +224,13 @@ export default function AllianceMembersPage() {
             </svg>
             Back to Alliance
           </Link>
-          <h1 className="text-3xl font-bold text-white mb-2">Alliance Members</h1>
+          <h1 className="text-2xl sm:text-3xl font-bold text-white mb-2">Alliance Members</h1>
           <p className="text-slate-400">{members.length} members total</p>
         </div>
         {canCreateUsers && (
           <button
             onClick={() => setShowCreateForm(true)}
-            className="btn-primary px-6 py-3 rounded-xl text-white font-bold flex items-center gap-2"
+            className="btn-primary w-full sm:w-auto justify-center px-4 sm:px-6 py-3 rounded-xl text-white font-bold flex items-center gap-2"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -253,7 +253,7 @@ export default function AllianceMembersPage() {
       )}
 
       {showCreateForm && (
-        <div className="glass-card rounded-xl border border-slate-800/80 p-6 mb-6">
+        <div className="glass-card rounded-xl border border-slate-800/80 p-4 sm:p-6 mb-6">
           <h2 className="text-lg font-semibold text-white mb-4">Create New Member</h2>
           <form onSubmit={handleCreateUser} className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -314,18 +314,18 @@ export default function AllianceMembersPage() {
                 <span className="text-slate-300">Can Edit Alliance Info</span>
               </label>
             )}
-            <div className="flex justify-end gap-4">
+            <div className="flex flex-col sm:flex-row gap-3 pt-2">
               <button
                 type="button"
                 onClick={() => setShowCreateForm(false)}
-                className="px-4 py-2 text-slate-400 hover:text-white transition-colors"
+                className="w-full sm:flex-1 px-4 py-3 text-center text-slate-400 hover:text-white border border-slate-700/50 rounded-xl transition-colors"
               >
                 Cancel
               </button>
               <button
                 type="submit"
                 disabled={creating}
-                className="btn-primary px-6 py-2 rounded-xl text-white font-bold disabled:opacity-50"
+                className="w-full sm:flex-1 btn-primary px-4 py-3 rounded-xl text-white font-bold disabled:opacity-50"
               >
                 {creating ? 'Creating...' : 'Create Member'}
               </button>
@@ -334,7 +334,62 @@ export default function AllianceMembersPage() {
         </div>
       )}
 
-      <div className="glass-card rounded-xl border border-slate-800/80 overflow-hidden">
+      <div className="space-y-4 xl:hidden">
+        {members.map((member) => (
+          <div key={`card-${member.id}`} className="glass-card rounded-xl border border-slate-800/80 p-4">
+            <div className="flex items-start justify-between gap-3 mb-3">
+              <div className="min-w-0">
+                <p className="font-medium text-white truncate">{member.display_name}</p>
+                <p className="text-xs text-slate-500">Joined {new Date(member.created_at).toLocaleDateString()}</p>
+              </div>
+              <span className={`shrink-0 px-3 py-1.5 rounded-lg text-sm font-medium border ${getRoleBadgeColor(member.role)}`}>
+                {member.role}
+              </span>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm mb-4">
+              <div className="rounded-lg bg-slate-900/30 border border-slate-800/60 p-3">
+                <p className="text-slate-500 text-xs uppercase tracking-wide mb-1">Stats</p>
+                <p className="text-slate-300">HQ {member.hq_level}</p>
+                <p className="text-slate-500">{member.power.toLocaleString()} power</p>
+              </div>
+
+              <div className="rounded-lg bg-slate-900/30 border border-slate-800/60 p-3">
+                <p className="text-slate-500 text-xs uppercase tracking-wide mb-2">Edit Permission</p>
+                {(isR5() || isSuperadmin()) && member.role === 'r4' ? (
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={member.can_edit_alliance}
+                      onChange={(e) => handleUpdatePermission(member.id, e.target.checked)}
+                      className="w-4 h-4 rounded border-slate-600 bg-slate-800 text-sky-500"
+                    />
+                    <span className="text-sm text-slate-400">
+                      {member.can_edit_alliance ? 'Yes' : 'No'}
+                    </span>
+                  </label>
+                ) : (
+                  <span className="text-sm text-slate-500">-</span>
+                )}
+              </div>
+            </div>
+
+            {canEditMembers && member.role !== 'superadmin' && member.id !== profile?.id && (
+              <button
+                onClick={() => openEditModal(member)}
+                className="w-full sm:w-auto text-sky-400 hover:text-sky-300 text-sm font-medium flex items-center justify-center gap-2 border border-sky-500/20 rounded-xl px-4 py-2.5"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                </svg>
+                Edit Member
+              </button>
+            )}
+          </div>
+        ))}
+      </div>
+
+      <div className="hidden xl:block glass-card rounded-xl border border-slate-800/80 overflow-hidden">
         <table className="w-full">
           <thead className="bg-slate-900/50">
             <tr>
@@ -403,11 +458,11 @@ export default function AllianceMembersPage() {
 
       {/* Edit Member Modal */}
       {editingMember && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
           <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setEditingMember(null)} />
-          <div className="relative glass-card rounded-2xl border border-slate-700/80 p-6 w-full max-w-md shadow-2xl">
+          <div className="relative glass-card rounded-xl border border-slate-800/80 p-4 sm:p-6 w-full max-w-md shadow-2xl max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-xl font-bold text-white">Edit Member</h2>
+              <h2 className="text-lg sm:text-xl font-bold text-white">Edit Member</h2>
               <button
                 onClick={() => setEditingMember(null)}
                 className="text-slate-400 hover:text-white transition-colors"
@@ -430,9 +485,10 @@ export default function AllianceMembersPage() {
                 />
               </div>
 
-              <div>
-                <label className="block text-sm font-medium text-slate-300 mb-2">HQ Level (1-35)</label>
-                <input
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-slate-300 mb-2">HQ Level (1-35)</label>
+                  <input
                   type="number"
                   value={editForm.hq_level}
                   onChange={(e) => setEditForm({ ...editForm, hq_level: parseInt(e.target.value) || 1 })}
@@ -440,17 +496,17 @@ export default function AllianceMembersPage() {
                   max={35}
                   className="w-full px-4 py-3 bg-slate-900/50 border border-slate-700/50 rounded-xl text-white focus:outline-none focus:border-sky-500/50"
                 />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-slate-300 mb-2">Power Level</label>
-                <input
-                  type="number"
-                  value={editForm.power}
-                  onChange={(e) => setEditForm({ ...editForm, power: parseInt(e.target.value) || 0 })}
-                  min={0}
-                  className="w-full px-4 py-3 bg-slate-900/50 border border-slate-700/50 rounded-xl text-white focus:outline-none focus:border-sky-500/50"
-                />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-slate-300 mb-2">Power Level</label>
+                  <input
+                    type="number"
+                    value={editForm.power}
+                    onChange={(e) => setEditForm({ ...editForm, power: parseInt(e.target.value) || 0 })}
+                    min={0}
+                    className="w-full px-4 py-3 bg-slate-900/50 border border-slate-700/50 rounded-xl text-white focus:outline-none focus:border-sky-500/50"
+                  />
+                </div>
               </div>
 
               <div>
@@ -459,23 +515,23 @@ export default function AllianceMembersPage() {
                   value={editForm.notes}
                   onChange={(e) => setEditForm({ ...editForm, notes: e.target.value })}
                   maxLength={500}
-                  rows={3}
+                  rows={4}
                   className="w-full px-4 py-3 bg-slate-900/50 border border-slate-700/50 rounded-xl text-white focus:outline-none focus:border-sky-500/50 resize-none"
                 />
               </div>
             </div>
 
-            <div className="flex justify-end gap-3 mt-6">
+            <div className="flex flex-col sm:flex-row gap-3 pt-2">
               <button
                 onClick={() => setEditingMember(null)}
-                className="px-4 py-2 text-slate-400 hover:text-white transition-colors"
+                className="w-full sm:flex-1 px-4 py-3 text-center text-slate-400 hover:text-white border border-slate-700/50 rounded-xl transition-colors"
               >
                 Cancel
               </button>
               <button
                 onClick={handleSaveMember}
                 disabled={savingMember}
-                className="btn-primary px-6 py-2 rounded-xl text-white font-bold disabled:opacity-50 flex items-center gap-2"
+                className="w-full sm:flex-1 btn-primary px-4 py-3 rounded-xl text-white font-bold disabled:opacity-50 flex items-center justify-center gap-2"
               >
                 {savingMember ? (
                   <>
@@ -490,7 +546,7 @@ export default function AllianceMembersPage() {
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                     </svg>
-                    Save
+                    Save Changes
                   </>
                 )}
               </button>
