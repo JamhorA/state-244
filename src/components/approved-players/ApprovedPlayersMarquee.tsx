@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect, useRef, useState } from 'react';
 import type { ApprovedPlayer } from '@/types';
 
 interface ApprovedPlayersMarqueeProps {
@@ -131,6 +132,35 @@ function PlayerCard({ player }: { player: ApprovedPlayer }) {
 }
 
 export function ApprovedPlayersMarquee({ players }: ApprovedPlayersMarqueeProps) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const measureTrackRef = useRef<HTMLDivElement>(null);
+  const [shouldMarquee, setShouldMarquee] = useState(true);
+
+  useEffect(() => {
+    if (!containerRef.current || !measureTrackRef.current) return;
+
+    const updateMode = () => {
+      const containerWidth = containerRef.current?.offsetWidth ?? 0;
+      const contentWidth = measureTrackRef.current?.scrollWidth ?? 0;
+
+      // Use marquee only when a single track meaningfully exceeds the viewport.
+      setShouldMarquee(contentWidth > containerWidth * 1.05);
+    };
+
+    updateMode();
+
+    const resizeObserver = new ResizeObserver(() => {
+      updateMode();
+    });
+
+    resizeObserver.observe(containerRef.current);
+    resizeObserver.observe(measureTrackRef.current);
+
+    return () => {
+      resizeObserver.disconnect();
+    };
+  }, [players]);
+
   if (players.length === 0) return null;
 
   const animationDuration = Math.max(15, players.length * 1.2);
@@ -150,28 +180,51 @@ export function ApprovedPlayersMarquee({ players }: ApprovedPlayersMarqueeProps)
           </p>
         </div>
 
-        <div className="relative">
-          <div className="absolute left-0 top-0 bottom-0 w-12 sm:w-20 lg:w-32 bg-gradient-to-r from-slate-950 to-transparent z-10 pointer-events-none" />
-          <div className="absolute right-0 top-0 bottom-0 w-12 sm:w-20 lg:w-32 bg-gradient-to-l from-slate-950 to-transparent z-10 pointer-events-none" />
+        <div className="relative" ref={containerRef}>
+          {/* Invisible single-track measurement for adaptive marquee/static mode */}
+          <div className="absolute inset-0 -z-10 pointer-events-none opacity-0 overflow-hidden">
+            <div ref={measureTrackRef} className="flex w-max gap-4 pr-4">
+              {players.map((player) => (
+                <PlayerCard key={`measure-${player.id}`} player={player} />
+              ))}
+            </div>
+          </div>
+
+          {shouldMarquee && (
+            <>
+              <div className="absolute left-0 top-0 bottom-0 w-12 sm:w-20 lg:w-32 bg-gradient-to-r from-slate-950 to-transparent z-10 pointer-events-none" />
+              <div className="absolute right-0 top-0 bottom-0 w-12 sm:w-20 lg:w-32 bg-gradient-to-l from-slate-950 to-transparent z-10 pointer-events-none" />
+            </>
+          )}
 
           <div className="overflow-hidden py-4">
-            <div
-              className="flex w-max animate-marquee hover:[animation-play-state:paused] motion-reduce:animate-none"
-              style={{
-                animationDuration: `${animationDuration}s`,
-              }}
-            >
-              <div className="flex shrink-0 gap-4 pr-4">
-                {players.map((player) => (
-                  <PlayerCard key={`primary-${player.id}`} player={player} />
-                ))}
+            {shouldMarquee ? (
+              <div
+                className="flex w-max animate-marquee hover:[animation-play-state:paused] motion-reduce:animate-none"
+                style={{
+                  animationDuration: `${animationDuration}s`,
+                }}
+              >
+                <div className="flex shrink-0 gap-4 pr-4">
+                  {players.map((player) => (
+                    <PlayerCard key={`primary-${player.id}`} player={player} />
+                  ))}
+                </div>
+                <div className="flex shrink-0 gap-4 pr-4" aria-hidden="true">
+                  {players.map((player) => (
+                    <PlayerCard key={`clone-${player.id}`} player={player} />
+                  ))}
+                </div>
               </div>
-              <div className="flex shrink-0 gap-4 pr-4" aria-hidden="true">
-                {players.map((player) => (
-                  <PlayerCard key={`clone-${player.id}`} player={player} />
-                ))}
+            ) : (
+              <div className="px-4">
+                <div className="flex flex-wrap justify-center gap-4">
+                  {players.map((player) => (
+                    <PlayerCard key={`static-${player.id}`} player={player} />
+                  ))}
+                </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
       </div>
