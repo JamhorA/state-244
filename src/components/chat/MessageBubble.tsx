@@ -47,6 +47,7 @@ export function MessageBubble({ message, isOwnMessage, senderName }: MessageBubb
 
           {/* Timestamp */}
           <p
+            suppressHydrationWarning
             className={`text-xs mt-1 ${
               isOwnMessage ? 'text-blue-200' : 'text-gray-500'
             }`}

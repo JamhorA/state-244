@@ -21,6 +21,17 @@ interface ApplicationCardProps {
   onClick?: () => void;
 }
 
+const appDateFormatter = new Intl.DateTimeFormat('en-US', {
+  month: 'numeric',
+  day: 'numeric',
+  year: 'numeric',
+  timeZone: 'UTC',
+});
+
+function formatAppDate(dateString: string) {
+  return appDateFormatter.format(new Date(dateString));
+}
+
 export function ApplicationCard({ 
   application, 
   onApprove, 
@@ -129,7 +140,7 @@ export function ApplicationCard({
         <div>
           <p className="text-xs text-slate-500 uppercase tracking-wide">Submitted</p>
           <p className="text-white font-medium">
-            {new Date(application.submitted_at).toLocaleDateString()}
+            {formatAppDate(application.submitted_at)}
           </p>
         </div>
         {application.troop_level && (
@@ -176,7 +187,7 @@ export function ApplicationCard({
             <div className="text-sm text-slate-400">
               <p>
                 By: {application.alliance_reviewer?.display_name || 'Unknown'} • 
-                {application.alliance_reviewed_at && new Date(application.alliance_reviewed_at).toLocaleDateString()}
+                {application.alliance_reviewed_at && formatAppDate(application.alliance_reviewed_at)}
               </p>
               {application.alliance_note && (
                 <p className="mt-2 italic text-slate-500">"{application.alliance_note}"</p>
@@ -234,7 +245,7 @@ export function ApplicationCard({
             <div className="text-sm text-slate-400">
               <p>
                 By: {application.president_reviewer?.display_name || 'Unknown'} • 
-                {application.president_reviewed_at && new Date(application.president_reviewed_at).toLocaleDateString()}
+                {application.president_reviewed_at && formatAppDate(application.president_reviewed_at)}
               </p>
               {application.president_note && (
                 <p className="mt-2 italic text-slate-500">"{application.president_note}"</p>

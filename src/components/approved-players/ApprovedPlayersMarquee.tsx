@@ -7,12 +7,19 @@ interface ApprovedPlayersMarqueeProps {
   players: ApprovedPlayer[];
 }
 
+const approvedDateFormatter = new Intl.DateTimeFormat('en-US', {
+  month: 'short',
+  day: 'numeric',
+  year: 'numeric',
+  timeZone: 'UTC',
+});
+
+function formatApprovedDate(dateString: string) {
+  return approvedDateFormatter.format(new Date(dateString));
+}
+
 function RegularCard({ player }: { player: ApprovedPlayer }) {
-  const formattedDate = new Date(player.approved_at).toLocaleDateString('en-US', {
-    month: 'short',
-    day: 'numeric',
-    year: 'numeric',
-  });
+  const formattedDate = formatApprovedDate(player.approved_at);
 
   const formattedPower = player.power_level >= 1000000
     ? `${(player.power_level / 1000000).toFixed(1)}M`
@@ -52,11 +59,7 @@ function RegularCard({ player }: { player: ApprovedPlayer }) {
 }
 
 function T10EliteCard({ player }: { player: ApprovedPlayer }) {
-  const formattedDate = new Date(player.approved_at).toLocaleDateString('en-US', {
-    month: 'short',
-    day: 'numeric',
-    year: 'numeric',
-  });
+  const formattedDate = formatApprovedDate(player.approved_at);
 
   const formattedPower = player.power_level >= 1000000
     ? `${(player.power_level / 1000000).toFixed(1)}M`
