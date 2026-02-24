@@ -10,26 +10,49 @@ import type { Profile, Alliance } from '@/types';
 
 export default function UsersPage() {
   const router = useRouter();
-  const { isAuthenticated, loading: authLoading } = useAuth();
+  const { user: currentUser, session, isAuthenticated, loading: authLoading } = useAuth();
   const { isSuperadmin, loading: roleLoading } = useRole();
+  const isSuperadminUser = isSuperadmin();
   const [users, setUsers] = useState<Profile[]>([]);
   const [alliances, setAlliances] = useState<Alliance[]>([]);
   const [loading, setLoading] = useState(true);
   const [editingUser, setEditingUser] = useState<string | null>(null);
   const [presidentId, setPresidentId] = useState<string | null>(null);
   const [assigningPresident, setAssigningPresident] = useState<string | null>(null);
+  const [deletingUserId, setDeletingUserId] = useState<string | null>(null);
+  const [deleteCandidate, setDeleteCandidate] = useState<{ id: string; displayName: string } | null>(null);
+  const [actionError, setActionError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!authLoading && !roleLoading) {
       if (!isAuthenticated) {
         router.replace('/login?redirect=/admin/users');
-      } else if (!isSuperadmin()) {
+      } else if (!isSuperadminUser) {
         router.replace('/dashboard');
       } else {
         fetchData();
       }
     }
-  }, [authLoading, roleLoading, isAuthenticated, isSuperadmin, router]);
+  }, [authLoading, roleLoading, isAuthenticated, isSuperadminUser, router]);
+
+  async function adminUpdateUser(userId: string, payload: Record<string, unknown>) {
+    if (!session?.access_token) throw new Error('Not authenticated');
+
+    const response = await fetch(`/api/admin/users/${userId}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${session.access_token}`,
+      },
+      body: JSON.stringify(payload),
+    });
+
+    const data = await response.json().catch(() => ({}));
+    if (!response.ok) {
+      throw new Error(data.error || 'Failed to update user');
+    }
+    return data.profile as Profile;
+  }
 
   async function fetchData() {
     try {
@@ -58,46 +81,77 @@ export default function UsersPage() {
   }
 
   async function handleUpdateRole(userId: string, role: string) {
-    const { error } = await supabase
-      .from('profiles')
-      .update({ role })
-      .eq('id', userId);
-
-    if (error) {
+    try {
+      const updatedProfile = await adminUpdateUser(userId, { role });
+      setUsers(users.map(u => u.id === userId ? updatedProfile : u));
+      if (updatedProfile.is_president && updatedProfile.role !== 'r4' && updatedProfile.role !== 'r5') {
+        setPresidentId(null);
+      }
+      setEditingUser(null);
+    } catch (error) {
       console.error('Error updating role:', error);
+      setEditingUser(null);
       return;
     }
-
-    setUsers(users.map(u => u.id === userId ? { ...u, role: role as Profile['role'] } : u));
-    setEditingUser(null);
   }
 
   async function handleUpdateAlliance(userId: string, allianceId: string | null) {
-    const { error } = await supabase
-      .from('profiles')
-      .update({ alliance_id: allianceId })
-      .eq('id', userId);
-
-    if (error) {
+    try {
+      const updatedProfile = await adminUpdateUser(userId, { alliance_id: allianceId });
+      setUsers(users.map(u => u.id === userId ? updatedProfile : u));
+    } catch (error) {
       console.error('Error updating alliance:', error);
       return;
     }
-
-    setUsers(users.map(u => u.id === userId ? { ...u, alliance_id: allianceId } : u));
   }
 
   async function handleUpdateEditPermission(userId: string, canEdit: boolean) {
-    const { error } = await supabase
-      .from('profiles')
-      .update({ can_edit_alliance: canEdit })
-      .eq('id', userId);
-
-    if (error) {
+    try {
+      const updatedProfile = await adminUpdateUser(userId, { can_edit_alliance: canEdit });
+      setUsers(users.map(u => u.id === userId ? updatedProfile : u));
+    } catch (error) {
       console.error('Error updating permission:', error);
       return;
     }
+  }
 
-    setUsers(users.map(u => u.id === userId ? { ...u, can_edit_alliance: canEdit } : u));
+  async function handleDeleteUser(userId: string, displayName: string) {
+    setActionError(null);
+    if (userId === currentUser?.id) {
+      setActionError('You cannot delete your own currently logged-in account.');
+      return;
+    }
+    setDeleteCandidate({ id: userId, displayName });
+  }
+
+  async function confirmDeleteUser() {
+    if (!session?.access_token || !deleteCandidate) return;
+    const { id: userId } = deleteCandidate;
+
+    setDeletingUserId(userId);
+    setActionError(null);
+    try {
+      const response = await fetch(`/api/admin/users/${userId}`, {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${session.access_token}`,
+        },
+      });
+
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to delete user');
+      }
+
+      setUsers(users.filter(u => u.id !== userId));
+      if (presidentId === userId) setPresidentId(null);
+      setDeleteCandidate(null);
+    } catch (error) {
+      console.error('Error deleting user:', error);
+      setActionError(error instanceof Error ? error.message : 'Failed to delete user');
+    } finally {
+      setDeletingUserId(null);
+    }
   }
 
   async function handleAssignPresident(userId: string) {
@@ -181,7 +235,7 @@ export default function UsersPage() {
     }
   }
 
-  if (authLoading || roleLoading || loading || !isAuthenticated || !isSuperadmin()) {
+  if (authLoading || roleLoading || loading || !isAuthenticated || !isSuperadminUser) {
     return (
       <div className="min-h-screen bg-slate-950 flex items-center justify-center">
         <div className="animate-spin h-8 w-8 border-2 border-sky-500 border-t-transparent rounded-full" />
@@ -206,6 +260,20 @@ export default function UsersPage() {
           Create User
         </Link>
       </div>
+
+      {actionError && (
+        <div className="mb-6 p-4 bg-red-500/10 border border-red-500/20 rounded-xl">
+          <div className="flex items-center justify-between gap-4">
+            <p className="text-red-400 text-sm">{actionError}</p>
+            <button
+              onClick={() => setActionError(null)}
+              className="text-red-300 hover:text-red-200 text-sm"
+            >
+              Dismiss
+            </button>
+          </div>
+        </div>
+      )}
 
       {presidentId && (
         <div className="mb-6 p-4 bg-amber-500/10 border border-amber-500/20 rounded-xl">
@@ -232,6 +300,7 @@ export default function UsersPage() {
                 <th className="px-6 py-4 text-left text-sm font-semibold text-slate-300">Alliance</th>
                 <th className="px-6 py-4 text-left text-sm font-semibold text-slate-300">Edit Permission</th>
                 <th className="px-6 py-4 text-left text-sm font-semibold text-slate-300">Created</th>
+                <th className="px-6 py-4 text-left text-sm font-semibold text-slate-300">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-800/50">
@@ -335,12 +404,51 @@ export default function UsersPage() {
                   <td className="px-6 py-4 text-sm text-slate-500">
                     {new Date(user.created_at).toLocaleDateString()}
                   </td>
+                  <td className="px-6 py-4">
+                    <button
+                      onClick={() => handleDeleteUser(user.id, user.display_name)}
+                      disabled={deletingUserId !== null || user.id === currentUser?.id}
+                      className="px-3 py-1.5 rounded-lg text-sm font-medium border border-red-500/30 bg-red-500/10 text-red-400 hover:bg-red-500/20 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                      title={user.id === currentUser?.id ? 'Cannot delete currently logged-in account' : 'Delete user'}
+                    >
+                      {deletingUserId === user.id ? 'Deleting...' : 'Delete'}
+                    </button>
+                  </td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
       </div>
+
+      {deleteCandidate && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
+          <div className="w-full max-w-md rounded-2xl border border-slate-700 bg-slate-900 shadow-2xl">
+            <div className="p-6 border-b border-slate-800">
+              <h2 className="text-xl font-bold text-white">Delete User?</h2>
+              <p className="text-sm text-slate-400 mt-2">
+                This permanently removes <span className="text-white font-medium">{deleteCandidate.displayName}</span> and their account.
+              </p>
+            </div>
+            <div className="p-6 flex items-center justify-end gap-3">
+              <button
+                onClick={() => setDeleteCandidate(null)}
+                disabled={deletingUserId !== null}
+                className="px-4 py-2 rounded-lg border border-slate-700 text-slate-300 hover:text-white hover:border-slate-600 transition-colors disabled:opacity-50"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={confirmDeleteUser}
+                disabled={deletingUserId !== null}
+                className="px-4 py-2 rounded-lg border border-red-500/30 bg-red-500/10 text-red-400 hover:bg-red-500/20 transition-colors disabled:opacity-50"
+              >
+                {deletingUserId === deleteCandidate.id ? 'Deleting...' : 'Delete User'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
