@@ -562,11 +562,21 @@ export default function DashboardPage() {
 
       {/* Edit Profile Modal */}
       {showEditModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
           <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setShowEditModal(false)} />
-          <div className="relative glass-card rounded-2xl border border-slate-700/80 p-4 sm:p-6 w-full max-w-md shadow-2xl">
+          <div className="relative glass-card rounded-xl border border-slate-800/80 p-4 sm:p-6 w-full max-w-md shadow-2xl max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-lg sm:text-xl font-bold text-white">Edit Profile</h2>
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-lg bg-sky-500/10 flex items-center justify-center">
+                  <svg className="w-5 h-5 text-sky-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zM21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+                <div>
+                  <h2 className="text-lg sm:text-xl font-bold text-white">Edit Profile</h2>
+                  <p className="text-xs text-slate-500">Update your player profile</p>
+                </div>
+              </div>
               <button
                 onClick={() => setShowEditModal(false)}
                 className="text-slate-400 hover:text-white transition-colors"
@@ -626,23 +636,23 @@ export default function DashboardPage() {
                   value={editForm.notes}
                   onChange={(e) => setEditForm({ ...editForm, notes: e.target.value })}
                   maxLength={500}
-                  rows={3}
+                  rows={4}
                   className="w-full px-4 py-3 bg-slate-900/50 border border-slate-700/50 rounded-xl text-white focus:outline-none focus:border-sky-500/50 resize-none"
                 />
               </div>
             </div>
 
-            <div className="flex flex-col-reverse sm:flex-row sm:justify-end gap-3 mt-6">
+            <div className="flex flex-col sm:flex-row gap-3 pt-2">
               <button
                 onClick={() => setShowEditModal(false)}
-                className="w-full sm:w-auto px-4 py-2.5 text-slate-400 hover:text-white transition-colors"
+                className="w-full sm:flex-1 px-4 py-3 text-center text-slate-400 hover:text-white border border-slate-700/50 rounded-xl transition-colors"
               >
                 Cancel
               </button>
               <button
                 onClick={handleSaveProfile}
                 disabled={saving}
-                className="btn-primary w-full sm:w-auto justify-center px-6 py-2.5 rounded-xl text-white font-bold disabled:opacity-50 flex items-center gap-2"
+                className="w-full sm:flex-1 btn-primary px-4 py-3 rounded-xl text-white font-semibold disabled:opacity-50 flex items-center justify-center gap-2"
               >
                 {saving ? (
                   <>
@@ -657,7 +667,7 @@ export default function DashboardPage() {
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                     </svg>
-                    Save
+                    Save Changes
                   </>
                 )}
               </button>
