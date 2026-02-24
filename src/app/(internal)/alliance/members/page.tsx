@@ -356,18 +356,24 @@ export default function AllianceMembersPage() {
 
               <div className="rounded-lg bg-slate-900/30 border border-slate-800/60 p-3">
                 <p className="text-slate-500 text-xs uppercase tracking-wide mb-2">Edit Permission</p>
-                {(isR5() || isSuperadmin()) && member.role === 'r4' ? (
-                  <label className="flex items-center gap-2 cursor-pointer">
-                    <input
-                      type="checkbox"
-                      checked={member.can_edit_alliance}
-                      onChange={(e) => handleUpdatePermission(member.id, e.target.checked)}
-                      className="w-4 h-4 rounded border-slate-600 bg-slate-800 text-sky-500"
-                    />
-                    <span className="text-sm text-slate-400">
+                {member.role === 'r4' ? (
+                  (isR5() || isSuperadmin()) ? (
+                    <label className="flex items-center gap-2 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={member.can_edit_alliance}
+                        onChange={(e) => handleUpdatePermission(member.id, e.target.checked)}
+                        className="w-4 h-4 rounded border-slate-600 bg-slate-800 text-sky-500"
+                      />
+                      <span className="text-sm text-slate-400">
+                        {member.can_edit_alliance ? 'Yes' : 'No'}
+                      </span>
+                    </label>
+                  ) : (
+                    <span className={`text-sm font-medium ${member.can_edit_alliance ? 'text-emerald-400' : 'text-slate-500'}`}>
                       {member.can_edit_alliance ? 'Yes' : 'No'}
                     </span>
-                  </label>
+                  )
                 ) : (
                   <span className="text-sm text-slate-500">-</span>
                 )}
@@ -421,18 +427,24 @@ export default function AllianceMembersPage() {
                   </div>
                 </td>
                 <td className="px-6 py-4">
-                  {(isR5() || isSuperadmin()) && member.role === 'r4' ? (
-                    <label className="flex items-center gap-2 cursor-pointer">
-                      <input
-                        type="checkbox"
-                        checked={member.can_edit_alliance}
-                        onChange={(e) => handleUpdatePermission(member.id, e.target.checked)}
-                        className="w-4 h-4 rounded border-slate-600 bg-slate-800 text-sky-500"
-                      />
-                      <span className="text-sm text-slate-400">
+                  {member.role === 'r4' ? (
+                    (isR5() || isSuperadmin()) ? (
+                      <label className="flex items-center gap-2 cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={member.can_edit_alliance}
+                          onChange={(e) => handleUpdatePermission(member.id, e.target.checked)}
+                          className="w-4 h-4 rounded border-slate-600 bg-slate-800 text-sky-500"
+                        />
+                        <span className="text-sm text-slate-400">
+                          {member.can_edit_alliance ? 'Yes' : 'No'}
+                        </span>
+                      </label>
+                    ) : (
+                      <span className={`text-sm font-medium ${member.can_edit_alliance ? 'text-emerald-400' : 'text-slate-500'}`}>
                         {member.can_edit_alliance ? 'Yes' : 'No'}
                       </span>
-                    </label>
+                    )
                   ) : (
                     <span className="text-sm text-slate-500">-</span>
                   )}
