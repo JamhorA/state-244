@@ -1,6 +1,5 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
 import type { ApprovedPlayer } from '@/types';
 
 interface ApprovedPlayersMarqueeProps {
@@ -132,31 +131,9 @@ function PlayerCard({ player }: { player: ApprovedPlayer }) {
 }
 
 export function ApprovedPlayersMarquee({ players }: ApprovedPlayersMarqueeProps) {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const scrollerRef = useRef<HTMLDivElement>(null);
-  const [start, setStart] = useState(false);
-
-  useEffect(() => {
-    if (!scrollerRef.current || !containerRef.current) return;
-
-    const containerWidth = containerRef.current.offsetWidth;
-    
-    // Keep duplicating until we have at least 2.5x container width for seamless loop
-    while (scrollerRef.current.scrollWidth < containerWidth * 2.5) {
-      const originalItems = Array.from(scrollerRef.current.children).slice(0, players.length);
-      originalItems.forEach((item) => {
-        const clone = item.cloneNode(true);
-        scrollerRef.current?.appendChild(clone);
-      });
-    }
-
-    setStart(true);
-  }, [players]);
-
   if (players.length === 0) return null;
 
   const animationDuration = Math.max(15, players.length * 1.2);
-
   return (
     <section className="relative z-10 py-12 overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-b from-slate-950 via-slate-900/50 to-slate-950" />
@@ -173,23 +150,27 @@ export function ApprovedPlayersMarquee({ players }: ApprovedPlayersMarqueeProps)
           </p>
         </div>
 
-        <div className="relative" ref={containerRef}>
+        <div className="relative">
           <div className="absolute left-0 top-0 bottom-0 w-12 sm:w-20 lg:w-32 bg-gradient-to-r from-slate-950 to-transparent z-10 pointer-events-none" />
           <div className="absolute right-0 top-0 bottom-0 w-12 sm:w-20 lg:w-32 bg-gradient-to-l from-slate-950 to-transparent z-10 pointer-events-none" />
 
           <div className="overflow-hidden py-4">
             <div
-              ref={scrollerRef}
-              className="flex gap-4 hover:[animation-play-state:paused]"
+              className="flex w-max animate-marquee hover:[animation-play-state:paused] motion-reduce:animate-none"
               style={{
-                animation: start 
-                  ? `marquee ${animationDuration}s linear infinite` 
-                  : 'none',
+                animationDuration: `${animationDuration}s`,
               }}
             >
-              {players.map((player, index) => (
-                <PlayerCard key={`${player.id}-${index}`} player={player} />
-              ))}
+              <div className="flex shrink-0 gap-4 pr-4">
+                {players.map((player) => (
+                  <PlayerCard key={`primary-${player.id}`} player={player} />
+                ))}
+              </div>
+              <div className="flex shrink-0 gap-4 pr-4" aria-hidden="true">
+                {players.map((player) => (
+                  <PlayerCard key={`clone-${player.id}`} player={player} />
+                ))}
+              </div>
             </div>
           </div>
         </div>
