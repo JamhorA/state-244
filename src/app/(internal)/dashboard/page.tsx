@@ -564,9 +564,9 @@ export default function DashboardPage() {
       {showEditModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setShowEditModal(false)} />
-          <div className="relative glass-card rounded-2xl border border-slate-700/80 p-6 w-full max-w-md shadow-2xl">
+          <div className="relative glass-card rounded-2xl border border-slate-700/80 p-4 sm:p-6 w-full max-w-md shadow-2xl">
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-xl font-bold text-white">Edit Profile</h2>
+              <h2 className="text-lg sm:text-xl font-bold text-white">Edit Profile</h2>
               <button
                 onClick={() => setShowEditModal(false)}
                 className="text-slate-400 hover:text-white transition-colors"
@@ -595,27 +595,29 @@ export default function DashboardPage() {
                 />
               </div>
 
-              <div>
-                <label className="block text-sm font-medium text-slate-300 mb-2">HQ Level (1-35)</label>
-                <input
-                  type="number"
-                  value={editForm.hq_level}
-                  onChange={(e) => setEditForm({ ...editForm, hq_level: parseInt(e.target.value) || 1 })}
-                  min={1}
-                  max={35}
-                  className="w-full px-4 py-3 bg-slate-900/50 border border-slate-700/50 rounded-xl text-white focus:outline-none focus:border-sky-500/50"
-                />
-              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-slate-300 mb-2">HQ Level (1-35)</label>
+                  <input
+                    type="number"
+                    value={editForm.hq_level}
+                    onChange={(e) => setEditForm({ ...editForm, hq_level: parseInt(e.target.value) || 1 })}
+                    min={1}
+                    max={35}
+                    className="w-full px-4 py-3 bg-slate-900/50 border border-slate-700/50 rounded-xl text-white focus:outline-none focus:border-sky-500/50"
+                  />
+                </div>
 
-              <div>
-                <label className="block text-sm font-medium text-slate-300 mb-2">Power Level</label>
-                <input
-                  type="number"
-                  value={editForm.power}
-                  onChange={(e) => setEditForm({ ...editForm, power: parseInt(e.target.value) || 0 })}
-                  min={0}
-                  className="w-full px-4 py-3 bg-slate-900/50 border border-slate-700/50 rounded-xl text-white focus:outline-none focus:border-sky-500/50"
-                />
+                <div>
+                  <label className="block text-sm font-medium text-slate-300 mb-2">Power Level</label>
+                  <input
+                    type="number"
+                    value={editForm.power}
+                    onChange={(e) => setEditForm({ ...editForm, power: parseInt(e.target.value) || 0 })}
+                    min={0}
+                    className="w-full px-4 py-3 bg-slate-900/50 border border-slate-700/50 rounded-xl text-white focus:outline-none focus:border-sky-500/50"
+                  />
+                </div>
               </div>
 
               <div>
@@ -630,17 +632,17 @@ export default function DashboardPage() {
               </div>
             </div>
 
-            <div className="flex justify-end gap-3 mt-6">
+            <div className="flex flex-col-reverse sm:flex-row sm:justify-end gap-3 mt-6">
               <button
                 onClick={() => setShowEditModal(false)}
-                className="px-4 py-2 text-slate-400 hover:text-white transition-colors"
+                className="w-full sm:w-auto px-4 py-2.5 text-slate-400 hover:text-white transition-colors"
               >
                 Cancel
               </button>
               <button
                 onClick={handleSaveProfile}
                 disabled={saving}
-                className="btn-primary px-6 py-2 rounded-xl text-white font-bold disabled:opacity-50 flex items-center gap-2"
+                className="btn-primary w-full sm:w-auto justify-center px-6 py-2.5 rounded-xl text-white font-bold disabled:opacity-50 flex items-center gap-2"
               >
                 {saving ? (
                   <>

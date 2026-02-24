@@ -61,8 +61,8 @@ export function ProfileEdit({ profile, onSave }: ProfileEditProps) {
   }
 
   return (
-    <div className="bg-white border border-gray-200 rounded-lg p-6">
-      <h2 className="text-xl font-semibold text-gray-900 mb-4">
+    <div className="bg-white border border-gray-200 rounded-lg p-4 sm:p-6">
+      <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-4">
         Edit Profile
       </h2>
 
@@ -95,41 +95,43 @@ export function ProfileEdit({ profile, onSave }: ProfileEditProps) {
             </p>
           </div>
 
-          {/* HQ Level */}
-          <div>
-            <label htmlFor="hq_level" className="block text-sm font-medium text-gray-700 mb-1">
-              HQ Level <span className="text-red-500">*</span>
-            </label>
-            <input
-              type="number"
-              id="hq_level"
-              name="hq_level"
-              value={formData.hq_level}
-              onChange={(e) => setFormData({ ...formData, hq_level: e.target.value })}
-              required
-              min="1"
-              max="50"
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              disabled={isSaving}
-            />
-          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {/* HQ Level */}
+            <div>
+              <label htmlFor="hq_level" className="block text-sm font-medium text-gray-700 mb-1">
+                HQ Level <span className="text-red-500">*</span>
+              </label>
+              <input
+                type="number"
+                id="hq_level"
+                name="hq_level"
+                value={formData.hq_level}
+                onChange={(e) => setFormData({ ...formData, hq_level: e.target.value })}
+                required
+                min="1"
+                max="50"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                disabled={isSaving}
+              />
+            </div>
 
-          {/* Power Level */}
-          <div>
-            <label htmlFor="power" className="block text-sm font-medium text-gray-700 mb-1">
-              Power Level <span className="text-red-500">*</span>
-            </label>
-            <input
-              type="number"
-              id="power"
-              name="power"
-              value={formData.power}
-              onChange={(e) => setFormData({ ...formData, power: e.target.value })}
-              required
-              min="0"
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              disabled={isSaving}
-            />
+            {/* Power Level */}
+            <div>
+              <label htmlFor="power" className="block text-sm font-medium text-gray-700 mb-1">
+                Power Level <span className="text-red-500">*</span>
+              </label>
+              <input
+                type="number"
+                id="power"
+                name="power"
+                value={formData.power}
+                onChange={(e) => setFormData({ ...formData, power: e.target.value })}
+                required
+                min="0"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                disabled={isSaving}
+              />
+            </div>
           </div>
 
           {/* Notes */}
@@ -154,19 +156,19 @@ export function ProfileEdit({ profile, onSave }: ProfileEditProps) {
           </div>
 
           {/* Buttons */}
-          <div className="flex gap-3 pt-4">
+          <div className="flex flex-col md:flex-row gap-3 pt-4">
             <button
               type="button"
               onClick={handleCancel}
               disabled={isSaving}
-              className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 font-medium rounded-md hover:bg-gray-50 transition-colors"
+              className="w-full md:flex-1 px-4 py-2.5 border border-gray-300 text-gray-700 font-medium rounded-md hover:bg-gray-50 transition-colors"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={isSaving}
-              className="flex-1 px-4 py-2 bg-blue-600 text-white font-medium rounded-md hover:bg-blue-700 disabled:opacity-50 transition-colors"
+              className="w-full md:flex-1 px-4 py-2.5 bg-blue-600 text-white font-medium rounded-md hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {isSaving ? 'Saving...' : 'Save Changes'}
             </button>

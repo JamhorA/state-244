@@ -126,18 +126,18 @@ export default function ChangePasswordPage() {
           Back to Dashboard
         </Link>
 
-        <div className="glass-card rounded-xl border border-slate-800/80 p-6">
-          <div className="flex items-center gap-3 mb-6">
+        <div className="glass-card rounded-xl border border-slate-800/80 p-4 sm:p-6">
+            <div className="flex items-center gap-3 mb-6">
             <div className="w-10 h-10 rounded-lg bg-sky-500/10 flex items-center justify-center">
               <svg className="w-5 h-5 text-sky-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
               </svg>
             </div>
             <div>
-              <h1 className="text-xl font-bold text-white">Change Password</h1>
-              <p className="text-xs text-slate-500">Update your account password</p>
+                <h1 className="text-lg sm:text-xl font-bold text-white">Change Password</h1>
+                <p className="text-xs text-slate-500">Update your account password</p>
+              </div>
             </div>
-          </div>
 
           {error && (
             <div className="mb-4 p-3 bg-red-500/10 border border-red-500/20 rounded-lg">
@@ -179,17 +179,17 @@ export default function ChangePasswordPage() {
               />
             </div>
 
-            <div className="flex gap-3 pt-2">
+            <div className="flex flex-col sm:flex-row gap-3 pt-2">
               <Link
                 href="/dashboard"
-                className="flex-1 px-4 py-3 text-center text-slate-400 hover:text-white border border-slate-700/50 rounded-xl transition-colors"
+                className="w-full sm:flex-1 px-4 py-3 text-center text-slate-400 hover:text-white border border-slate-700/50 rounded-xl transition-colors"
               >
                 Cancel
               </Link>
               <button
                 type="submit"
                 disabled={loading}
-                className="flex-1 btn-primary px-4 py-3 rounded-xl text-white font-semibold disabled:opacity-50 flex items-center justify-center gap-2"
+                className="w-full sm:flex-1 btn-primary px-4 py-3 rounded-xl text-white font-semibold disabled:opacity-50 flex items-center justify-center gap-2"
               >
                 {loading ? (
                   <>
