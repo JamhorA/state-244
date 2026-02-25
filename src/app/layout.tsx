@@ -35,7 +35,6 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: "Jum", url: "https://state244.com" }],
   creator: "Jum from Hitsquad",
-  creator: "State 244 Hub",
   metadataBase: new URL("https://state244.com"),
   openGraph: {
     type: "website",
