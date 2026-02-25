@@ -5,6 +5,9 @@ import { fetchApprovedApplications } from '@/lib/applications';
 import type { Alliance, ApprovedPlayer } from '@/types';
 import Link from 'next/link';
 
+// Revalidate every 5 minutes to show database changes
+export const revalidate = 300;
+
 function StarIcon({ className }: { className?: string }) {
   return (
     <svg className={className} viewBox="0 0 24 24" fill="currentColor">
