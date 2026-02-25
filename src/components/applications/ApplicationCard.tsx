@@ -122,6 +122,9 @@ export function ApplicationCard({
           <p className="text-sm text-slate-400">
             {application.current_server} • Power: {application.power_level?.toLocaleString() || 0}
           </p>
+          <p className="text-xs text-amber-300 mt-1">
+            Topic: {application.topic || 'General Migration'}
+          </p>
           {showAlliance && application.target_alliance && (
             <p className="text-xs text-sky-400 mt-1">
               Target: {application.target_alliance.name}

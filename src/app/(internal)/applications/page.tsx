@@ -47,6 +47,7 @@ export default function ApplicationsPage() {
     const query = searchQuery.toLowerCase().trim();
     return applications.filter(app => 
       app.player_name?.toLowerCase().includes(query) ||
+      app.topic?.toLowerCase().includes(query) ||
       app.current_server?.toLowerCase().includes(query) ||
       app.current_alliance?.toLowerCase().includes(query)
     );
@@ -115,6 +116,7 @@ export default function ApplicationsPage() {
   const exportToXLSX = () => {
     const data = filteredApplications.map(app => ({
       'Player Name': app.player_name,
+      'Topic': app.topic || '',
       'Current Server': app.current_server,
       'Power Level': app.power_level,
       'HQ Level': app.hq_level,
@@ -212,7 +214,7 @@ export default function ApplicationsPage() {
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search player, server, alliance..."
+            placeholder="Search player, topic, server, alliance..."
             className="w-full sm:w-64 pl-10 pr-10 py-2 bg-slate-800/50 border border-slate-700/50 rounded-lg text-white text-sm focus:outline-none focus:border-sky-500/50"
           />
           {searchQuery && (

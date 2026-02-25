@@ -112,6 +112,25 @@ export default function AdminPage() {
             </div>
           </div>
         </Link>
+
+        <Link
+          href="/admin/contact"
+          className="glass-card rounded-xl p-6 border border-slate-800/80 hover:border-emerald-400/50 transition-all group"
+        >
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 rounded-lg bg-emerald-500/10 flex items-center justify-center">
+              <svg className="w-6 h-6 text-emerald-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8m-18 8h18a2 2 0 002-2V8a2 2 0 00-2-2H3a2 2 0 00-2 2v6a2 2 0 002 2z" />
+              </svg>
+            </div>
+            <div>
+              <h2 className="text-lg font-semibold text-white group-hover:text-emerald-300 transition-colors">
+                Contact Inbox
+              </h2>
+              <p className="text-sm text-slate-400">View, reply, and archive messages</p>
+            </div>
+          </div>
+        </Link>
       </div>
     </div>
   );

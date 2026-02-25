@@ -49,6 +49,7 @@ export type ApprovalStageStatus = 'pending' | 'approved' | 'rejected';
 export interface MigrationApplication {
   id: string;
   player_name: string;
+  topic: string;
   current_server: string;
   current_alliance?: string | null;
   power_level: number;

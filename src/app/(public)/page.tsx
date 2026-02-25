@@ -293,6 +293,12 @@ export default async function HomePage() {
                     Login
                   </Link>
                 </li>
+                <li>
+                  <Link href="/contact" className="text-slate-400 hover:text-amber-400 transition-colors flex items-center gap-2">
+                    <span className="w-1.5 h-1.5 rounded-full bg-slate-700" />
+                    Contact
+                  </Link>
+                </li>
               </ul>
             </div>
             

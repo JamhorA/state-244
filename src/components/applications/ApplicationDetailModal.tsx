@@ -170,6 +170,9 @@ export function ApplicationDetailModal({
             <div className="flex items-start justify-between">
               <div>
                 <h3 className="text-2xl font-bold text-white">{application.player_name}</h3>
+                <p className="text-amber-300 text-sm mt-1">
+                  Topic: {application.topic || 'General Migration'}
+                </p>
                 <p className="text-slate-400 mt-1">
                   {application.current_server} • Power: {application.power_level?.toLocaleString() || 0}
                 </p>
@@ -184,6 +187,10 @@ export function ApplicationDetailModal({
               <div>
                 <p className="text-xs text-slate-500 uppercase tracking-wide">Current Alliance</p>
                 <p className="text-white font-medium text-lg">{application.current_alliance || '-'}</p>
+              </div>
+              <div>
+                <p className="text-xs text-slate-500 uppercase tracking-wide">Topic</p>
+                <p className="text-white font-medium text-lg break-words">{application.topic || 'General Migration'}</p>
               </div>
               <div>
                 <p className="text-xs text-slate-500 uppercase tracking-wide">Target Alliance</p>

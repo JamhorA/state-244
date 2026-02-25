@@ -15,6 +15,7 @@ export function MigrationApplicationForm({ alliance, alliances }: MigrationAppli
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [formData, setFormData] = useState({
     player_name: '',
+    topic: '',
     current_server: '',
     current_alliance: '',
     power_level: '',
@@ -43,6 +44,14 @@ export function MigrationApplicationForm({ alliance, alliances }: MigrationAppli
       newErrors.player_name = 'Player name is required';
     } else if (formData.player_name.length > 50) {
       newErrors.player_name = 'Player name must be 50 characters or less';
+    }
+
+    if (!formData.topic.trim()) {
+      newErrors.topic = 'Topic is required';
+    } else if (formData.topic.trim().length < 3) {
+      newErrors.topic = 'Topic must be at least 3 characters';
+    } else if (formData.topic.trim().length > 120) {
+      newErrors.topic = 'Topic must be 120 characters or less';
     }
 
     if (!formData.current_server.trim()) {
@@ -150,6 +159,7 @@ export function MigrationApplicationForm({ alliance, alliances }: MigrationAppli
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           player_name: formData.player_name,
+          topic: formData.topic.trim(),
           current_server: formData.current_server,
           current_alliance: formData.current_alliance,
           power_level: parseInt(formData.power_level),
@@ -293,6 +303,33 @@ export function MigrationApplicationForm({ alliance, alliances }: MigrationAppli
               </div>
             </div>
             {errors.current_server && <p className="mt-2 text-sm text-red-400">{errors.current_server}</p>}
+          </div>
+
+          {/* Topic */}
+          <div className="md:col-span-2">
+            <label htmlFor="topic" className="block text-sm font-semibold text-slate-300 mb-2">
+              Application Topic <span className="text-red-400">*</span>
+            </label>
+            <input
+              type="text"
+              id="topic"
+              name="topic"
+              value={formData.topic}
+              onChange={handleChange}
+              maxLength={120}
+              className={`w-full px-4 py-3 bg-slate-900/50 border rounded-xl focus:outline-none focus:ring-2 transition-all placeholder:text-slate-600 text-slate-200 ${
+                errors.topic ? 'border-red-500/50 focus:ring-red-500/50' : 'border-slate-700/50 focus:border-sky-500/50 focus:ring-sky-500/20 hover:border-slate-600/80'
+              }`}
+              placeholder="e.g. Main account migration / Group move with 3 players"
+              disabled={isSubmitting}
+            />
+            <div className="mt-2 flex items-center justify-between gap-3">
+              {errors.topic ? (
+                <p className="text-sm text-red-400">{errors.topic}</p>
+              ) : (
+                <p className="text-xs text-slate-500">{formData.topic.length} / 120 characters</p>
+              )}
+            </div>
           </div>
 
           {/* Current Alliance */}

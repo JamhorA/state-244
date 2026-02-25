@@ -68,6 +68,12 @@ export default function PublicLayout({ children }: PublicLayoutProps) {
               >
                 Apply
               </Link>
+              <Link 
+                href="/contact" 
+                className="text-slate-300 hover:text-white font-medium px-4 py-2 rounded-lg hover:bg-slate-800/80 transition-all text-sm tracking-wide"
+              >
+                Contact
+              </Link>
               
               {loading ? null : isAuthenticated ? (
                   <div className="flex items-center gap-2 xl:gap-3 ml-2">
@@ -154,6 +160,14 @@ export default function PublicLayout({ children }: PublicLayoutProps) {
                 className="w-full text-left text-lg sm:text-xl font-semibold text-slate-200 py-3 sm:py-4 px-4 sm:px-6 hover:text-white hover:bg-slate-800/50 transition-all rounded-xl"
               >
                 Apply
+              </Link>
+
+              <Link
+                href="/contact"
+                onClick={closeMobileMenu}
+                className="w-full text-left text-lg sm:text-xl font-semibold text-slate-200 py-3 sm:py-4 px-4 sm:px-6 hover:text-white hover:bg-slate-800/50 transition-all rounded-xl"
+              >
+                Contact
               </Link>
             </div>
 
