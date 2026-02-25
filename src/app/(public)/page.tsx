@@ -5,8 +5,8 @@ import { fetchApprovedApplications } from '@/lib/applications';
 import type { Alliance, ApprovedPlayer } from '@/types';
 import Link from 'next/link';
 
-// Revalidate every 5 minutes to show database changes
-export const revalidate = 300;
+// Revalidate every 30 seconds to show database changes
+export const revalidate = 30;
 
 function StarIcon({ className }: { className?: string }) {
   return (
