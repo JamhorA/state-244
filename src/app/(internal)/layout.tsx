@@ -122,6 +122,15 @@ export default function InternalLayout({ children }: InternalLayoutProps) {
                 </Link>
               )}
 
+              {isOfficer() && (
+                <Link
+                  href="/war-plan"
+                  className="text-slate-400 hover:text-white font-medium px-4 py-2 rounded-lg hover:bg-slate-800/80 transition-all text-sm"
+                >
+                  War Plan
+                </Link>
+              )}
+
               {(isR5() || isSuperadmin()) && (
                 <Link
                   href="/state-info/proposals"
@@ -226,6 +235,16 @@ export default function InternalLayout({ children }: InternalLayoutProps) {
                   className="w-full text-left text-lg sm:text-xl font-semibold text-slate-200 py-3 sm:py-4 px-4 sm:px-6 hover:text-white hover:bg-slate-800/50 transition-all rounded-xl"
                 >
                   Applications
+                </Link>
+              )}
+
+              {isOfficer() && (
+                <Link
+                  href="/war-plan"
+                  onClick={closeMobileMenu}
+                  className="w-full text-left text-lg sm:text-xl font-semibold text-slate-200 py-3 sm:py-4 px-4 sm:px-6 hover:text-white hover:bg-slate-800/50 transition-all rounded-xl"
+                >
+                  War Plan
                 </Link>
               )}
 

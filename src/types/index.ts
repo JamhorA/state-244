@@ -179,3 +179,41 @@ export interface ApprovedPlayer {
   approved_at: string;
   troop_level?: string | null;
 }
+
+// War Plan Types (Phase 1)
+
+export type WarPlanMode = 'glory_war' | 'canyon_clash' | 'svs' | 'arctic_ice_pit_clash';
+export type WarPlanTeam = 'attacker' | 'defender';
+
+export interface WarRosterPlayer {
+  id: string;
+  alliance_id: string;
+  player_name: string;
+  linked_profile_id: string | null;
+  notes: string | null;
+  is_active: boolean;
+  created_by: string | null;
+  updated_by: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface WarPlan {
+  id: string;
+  alliance_id: string;
+  mode: WarPlanMode;
+  title: string;
+  created_by: string | null;
+  updated_by: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface WarPlanAssignment {
+  id: string;
+  plan_id: string;
+  roster_player_id: string;
+  team: WarPlanTeam;
+  position: number;
+  created_at: string;
+}
